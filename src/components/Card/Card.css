@@ -1,0 +1,13 @@
+.c-app-card {
+    height: 100%;
+    margin: auto;
+}
+
+.c-app-card > .card {
+    height: 100%;
+}
+
+.c-app-card > .card img {
+    height: 250px;
+    object-fit: cover;
+}
