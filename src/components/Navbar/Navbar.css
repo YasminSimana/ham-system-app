@@ -1,0 +1,17 @@
+.c-nav {
+    background-color: indianred;
+    opacity: 0.6;
+}
+
+.c-nav .navbar-nav a.nav-link {
+    color: white;
+}
+
+.c-nav a.navbar-brand {
+    color: white;
+    font-family: 'Pacifico', cursive;
+}
+
+.c-nav .navbar-toggler {
+    color: white;
+}

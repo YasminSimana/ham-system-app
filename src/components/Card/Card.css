@@ -1,13 +1,18 @@
 .c-app-card {
     height: 100%;
     margin: auto;
+    width: 20%;
+    margin: 5px;
 }
 
 .c-app-card > .card {
     height: 100%;
+    /* background-color:transparent;
+    border: none; */
 }
 
 .c-app-card > .card img {
-    height: 250px;
+    /* height: 250px; */
     object-fit: cover;
+    border-radius: 16px;
 }

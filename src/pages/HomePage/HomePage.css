@@ -1,3 +1,30 @@
+.p-hp {
+    background-image: url("https://static.dezeen.com/uploads/2018/11/bruo-ole-scheeren-bangkok-thailand-tallest-building_dezeen_2364_hero.jpg");
+    background-position: center; /* Center the image */
+    background-repeat: no-repeat; /* Do not repeat the image */
+    background-size: cover;
+}
+
 .p-hp .center-col {
     justify-content: center;
+}
+
+.p-hp h1 {
+    font-family: 'Pacifico', cursive;
+    color: black;
+}
+
+.p-hp .row {
+    align-content: center;
+}
+
+.p-hp .img-set {
+    width: 400px;
+    border-radius: 22%;
+    opacity: 0.75;
+}
+
+.p-hp .carousel-item {
+    margin-top: 40px;
+    margin-bottom: 20px;
 }

@@ -9,6 +9,7 @@ import Issues from './pages/Issues/Issues';
 import { useState } from 'react';
 import Parse from 'parse';
 import UserModel from './models/UserModel';
+import Messages from './pages/Messages/Messages';
 
 function App() {
   const [activeUser, setActiveUser] = useState(
@@ -29,7 +30,8 @@ function App() {
       <HashRouter>
         <Switch>
           <Route exact path="/"><HomePage activeUser={activeUser} onLogOut={handleLogout}/></Route>
-          <Route exact path="/issues"><Issues activeUser={activeUser}/></Route>
+          <Route exact path="/messages"><Messages activeUser={activeUser} onLogOut={handleLogout}/></Route>
+          <Route exact path="/issues"><Issues activeUser={activeUser} onLogOut={handleLogout}/></Route>
           <Route exact path="/login"><LogIn onLogIn={handleLogin}/></Route>
         </Switch>
       </HashRouter>

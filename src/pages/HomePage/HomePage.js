@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { Col, Container, Row } from 'react-bootstrap';
+import { Carousel, CarouselItem, Col, Container, Image, Row } from 'react-bootstrap';
 import AppCard from '../../components/Card/Card';
 import { AppNavbar } from '../../components/Navbar/Navbar';
 import './HomePage.css';
@@ -11,17 +11,50 @@ export function HomePage(props) {
     <div className="p-hp">
       <AppNavbar activeUser={activeUser} onLogOut={onLogOut}/>
       <div>
+
         <Container>
           <Row className="justify-content-md-center">
-            <AppCard
-              img="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvEc5xde4O5-9KgQyrJBEEjphmiPqXSdnFGA&usqp=CAU"
-              title="Homeowner Association Management System"
-              desc=""
-              link="">
-            </AppCard>
+            <h1>Homeowner Association Management System</h1>
           </Row>
-          <Row>
-              <AppCard 
+          {/* <Row> */}
+          <Carousel>
+            <Carousel.Item>
+              <img
+                className="d-block img-set mx-auto"
+                src="https://www.gethow.org/wp-content/uploads/2019/08/property-manager.jpg"
+                alt="First slide"
+              />
+              <Carousel.Caption>
+                <h3>Manage your committee</h3>
+                <p>With this app you will find it very easy to manage your committee</p>
+              </Carousel.Caption>
+            </Carousel.Item>
+            <Carousel.Item>
+              <img
+                className="d-block img-set mx-auto"
+                src="https://images.idgesg.net/images/article/2018/01/group-of-people-applauding_agreement_community-100746938-large.jpg"
+                alt="Third slide"
+              />
+
+              <Carousel.Caption>
+                <h3>Improve your performance</h3>
+                <p>This app will help you improve your performance</p>
+              </Carousel.Caption>
+            </Carousel.Item>
+            <Carousel.Item>
+              <img
+                className="d-block img-set mx-auto"
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTqXbDmRJkcFQWqNf-cBaynQC-2sNF6mKcDag&usqp=CAU"
+                alt="Third slide"
+              />
+
+              <Carousel.Caption>
+                <h3>Happy tenants</h3>
+                <p>Useing this app will lead to much happyer tenants</p>
+              </Carousel.Caption>
+            </Carousel.Item>
+          </Carousel>
+              {/* <AppCard 
                 img="https://www.gethow.org/wp-content/uploads/2019/08/property-manager.jpg"
                 title="Manage your committee"
                 desc="With this app you will find it very easy to manage your committee"
@@ -38,8 +71,8 @@ export function HomePage(props) {
                 title="Happy tenants"
                 desc="Useing this app will lead to much happyer tenants"
                 link="">
-              </AppCard>
-          </Row>
+              </AppCard> */}
+          {/* </Row> */}
         </Container>
       </div>
       </div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Card, CardImg } from 'react-bootstrap';
+import { Button, Card, CardImg, Image } from 'react-bootstrap';
 import './Card.css';
 
 function AppCard(props) {
@@ -7,7 +7,8 @@ function AppCard(props) {
     return (
         <div className="c-app-card">
             <Card style={{ width: '18rem' }}>
-                <Card.Img variant="top" src={img} />
+                <Card.Img variant="top" src={img} roundedCircle />
+                <Image src={img} roundedCircle ></Image>
                 <Card.Body>
                     <Card.Title>{title}</Card.Title>
                     <Card.Text>

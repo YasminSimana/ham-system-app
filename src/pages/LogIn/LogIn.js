@@ -26,7 +26,7 @@ export function LogIn(props) {
   }
 
   if (redirect) {
-    return <Redirect to="/issues" />;
+    return <Redirect to="/" />;
   }
 
   return (
@@ -41,7 +41,7 @@ export function LogIn(props) {
           </Form.Text>
         </Form.Group>
 
-        <Form.Group controlId="formBasicEmail">
+        <Form.Group controlId="formBasicUserName">
           <Form.Label>User name</Form.Label>
           <Form.Control value={userName} type="text" placeholder="Enter your username" onChange={(e)=>setUserName(e.target.value)}/>
         </Form.Group>
