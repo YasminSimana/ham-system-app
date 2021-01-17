@@ -4,6 +4,7 @@ import Parse from 'parse';
 import UserModel from '../../models/UserModel';
 import { Button, Form, FormCheck, FormControl, FormGroup, FormLabel, FormText } from 'react-bootstrap';
 import { Redirect } from 'react-router';
+import './LogIn.css';
 
 export function LogIn(props) {
   const {onLogIn} = props;
@@ -30,7 +31,7 @@ export function LogIn(props) {
   }
 
   return (
-    <div>
+    <div className="p-login">
 
       <Form>
         <Form.Group controlId="formBasicEmail">
