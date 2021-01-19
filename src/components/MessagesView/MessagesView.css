@@ -13,3 +13,7 @@
     display: flex;
     justify-content: space-evenly;
 }
+
+.c-msg-view .add-comment-btn{
+    display: none;
+}

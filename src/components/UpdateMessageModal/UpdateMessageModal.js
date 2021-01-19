@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Button, Col, Form, Image, Modal, Row } from 'react-bootstrap';
 
-function NewMessageModal(props) {
-    const { show, handleClose, addMessage } = props;
+function UpdateMessageModal(props) {
+    const { show, handleClose, updateMessage, id, currentTitle, currentDetails, currentPriority, currentImg} = props;
     const [title, setTitle] = useState("");
     const [details, setDetails] = useState("");
     const [priority, setPriority] = useState(null);
@@ -24,9 +24,14 @@ function NewMessageModal(props) {
       }
     }
 
-    function handleAddMessage() {
-      addMessage(title, details, priority, img);
-      closeModal();
+    function handleUpdateMessage() {
+        const newTitle = title ? title : currentTitle;
+        const newDetails = details ? details : currentDetails;
+        const newPriority = priority ? priority : currentPriority;
+        const newImg = img ? img : currentImg;
+        console.log("update", newTitle, newDetails, newPriority, newImg);
+        updateMessage(id, newTitle, newDetails, newPriority, newImg);
+        closeModal();
     }
   
     const imgURL = img ? URL.createObjectURL(img) : "";
@@ -34,7 +39,7 @@ function NewMessageModal(props) {
     return (
       <Modal show={show} onHide={closeModal} size="xl" className="c-new-message-modal">
           <Modal.Header closeButton>
-              <Modal.Title>New Message</Modal.Title>
+              <Modal.Title>Update Message</Modal.Title>
           </Modal.Header>
           <Modal.Body>
               <Form>
@@ -44,7 +49,7 @@ function NewMessageModal(props) {
                           Message Title
                       </Form.Label>
                       <Col sm={10}>
-                          <Form.Control type="text" placeholder="Message Title" value={title} onChange={e => setTitle(e.target.value)} />
+                          <Form.Control type="text" placeholder={currentTitle} value={title} onChange={e => setTitle(e.target.value)} />
                       </Col>
                   </Form.Group>
 
@@ -53,7 +58,7 @@ function NewMessageModal(props) {
                           Message Details
                       </Form.Label>
                       <Col sm={10}>
-                          <Form.Control type="text" placeholder="Message Details" value={details} onChange={e => setDetails(e.target.value)}  />
+                          <Form.Control type="text" placeholder={currentDetails} value={details} onChange={e => setDetails(e.target.value)}  />
                       </Col>
                   </Form.Group>
 
@@ -62,7 +67,7 @@ function NewMessageModal(props) {
                           Message Priority
                       </Form.Label>
                       <Col sm={10}>
-                          <Form.Control type="number" placeholder="Message Priority" value={priority} onChange={e => setPriority(e.target.value)}  />
+                          <Form.Control type="number" placeholder={currentPriority} value={priority} onChange={e => setPriority(e.target.value)}  />
                       </Col>
                   </Form.Group>
 
@@ -81,12 +86,12 @@ function NewMessageModal(props) {
               <Button variant="secondary" onClick={closeModal}>
                   Cancel
               </Button>
-              <Button variant="primary" onClick={handleAddMessage}>
-                  Create Message
+              <Button variant="primary" onClick={handleUpdateMessage}>
+                  Update Message
               </Button>
           </Modal.Footer>
       </Modal>
   );
   }
 
-export default NewMessageModal;
+export default UpdateMessageModal;

@@ -1,15 +1,15 @@
-.p-messages {
-    display: block;
-    position: relative;
+.p-signup {
+    display: flex;
+    justify-content: center;
     height: 100%;
 }
 
-.p-messages::after {
+.p-signup::after {
     background-image: url("https://static.dezeen.com/uploads/2018/11/bruo-ole-scheeren-bangkok-thailand-tallest-building_dezeen_2364_hero.jpg");
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
-    opacity: 0.5;
+    opacity: 0.2;
     content: "";
     top: 0;
     left: 0;
@@ -21,18 +21,7 @@
     height: 100%;
 }
 
-.p-messages .filters {
-    margin-top: 10px;
-    display: flex;
-    justify-content: space-evenly;
+.p-signup .form-group {
+    width: 100%;
+    text-align: initial;
 }
-
-.p-messages .sort-by {
-    margin: 2.5%;
-}
-
-.p-messages .new-msg-btn {
-    display: flex;
-    justify-content: flex-end;
-}
-

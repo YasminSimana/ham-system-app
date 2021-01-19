@@ -1,6 +1,7 @@
 import './App.css';
-import { HashRouter, Route, Switch } from 'react-router-dom';
+import { HashRouter, Redirect, Route, Switch } from 'react-router-dom';
 import { LogIn } from './pages/LogIn/LogIn';
+import { SignUp } from './pages/SignUp/SignUp';
 import { HomePage } from './pages/HomePage/HomePage';
 import Issues from './pages/Issues/Issues';
 import { useState } from 'react';
@@ -11,15 +12,23 @@ import Messages from './pages/Messages/Messages';
 function App() {
   const [activeUser, setActiveUser] = useState(
     Parse.User.current() ? new UserModel(Parse.User.current()) : null);
+  const [redirect, setRedirect] = useState(false);
 
 
   function handleLogin(loggedInUser) {
     setActiveUser(loggedInUser);
+    setRedirect(false);
   }
 
   function handleLogout(loggedInUser) {
     setActiveUser(null);
     Parse.User.logOut();
+    setRedirect(true);
+  }
+
+  function handleSignup(loggedInUser) {
+    setActiveUser(loggedInUser);
+    setRedirect(false);
   }
 
   return (
@@ -27,9 +36,10 @@ function App() {
       <HashRouter>
         <Switch>
           <Route exact path="/"><HomePage activeUser={activeUser} onLogOut={handleLogout}/></Route>
-          <Route exact path="/messages"><Messages activeUser={activeUser} onLogOut={handleLogout}/></Route>
-          <Route exact path="/issues"><Issues activeUser={activeUser} onLogOut={handleLogout}/></Route>
+          <Route exact path="/messages"><Messages activeUser={activeUser} onLogOut={handleLogout}/>{redirect ? <Redirect to="/" /> : null}</Route>
+          <Route exact path="/issues"><Issues activeUser={activeUser} onLogOut={handleLogout}/>{redirect ? <Redirect to="/" /> : null}</Route>
           <Route exact path="/login"><LogIn onLogIn={handleLogin}/></Route>
+          <Route exact path="/signup"><SignUp onSignUp={handleSignup}/></Route>
         </Switch>
       </HashRouter>
     </div>

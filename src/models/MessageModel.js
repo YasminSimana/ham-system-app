@@ -1,5 +1,4 @@
 import { ExclamationTriangle, InfoCircle } from 'react-bootstrap-icons';
-import Parse from 'parse';
 
 class MessageModel {
     constructor(results){
@@ -9,6 +8,7 @@ class MessageModel {
         this.details = results.get("details");
         this.priority = results.get("priority");
         this.img = results.get("img").url();
+        this.readBy = results.get("readBy");
     }
 
     getIcon() {
@@ -25,19 +25,6 @@ class MessageModel {
         } else if(this.priority === 2){
             return "Warning"
         }
-    }
-
-    async getComments() {
-        const Comment = Parse.Object.extend('Comment');
-        const query = new Parse.Query(Comment);
-        // query.equalTo("msg", new Parse.Object("message"));
-        // try{
-        //     const results = await query.find();
-        //     console.log('Comment found', results);
-        //     return results;
-        // } catch (error){
-        //     console.error('Error while fetching Comment', error);
-        // }
     }
 }
 

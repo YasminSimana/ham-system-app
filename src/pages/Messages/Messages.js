@@ -6,6 +6,7 @@ import MessageModel from '../../models/MessageModel';
 import './Messages.css';
 import MessagesView from '../../components/MessagesView/MessagesView';
 import NewMessageModal from '../../components/NewMessageModal/NewMessageModal';
+import UpdateMessageModal from '../../components/UpdateMessageModal/UpdateMessageModal';
 
 function Messages(props) {
     const {activeUser, onLogOut} = props;
@@ -16,18 +17,22 @@ function Messages(props) {
     const [showModal, setShowModal] = useState(false);
 
     useEffect(()=> {
-        async function fetchData() {
+        async function fetchMessagesData() {
             const parseMessage = Parse.Object.extend('message');
             const query = new Parse.Query(parseMessage);
+            const community = new Parse.Object.extend('Community');
+            community.id = activeUser.community;
+            console.log("active user", activeUser.community)
+            query.equalTo("community", activeUser.community);
             const parseMessages = await query.find();
             setMessagesArr(parseMessages.map(item => new MessageModel(item)));
+            console.log("fetch", messagesArr);
         }
 
         if (activeUser) {
-            fetchData()
+            fetchMessagesData();
         }
     }, [activeUser])
-
 
     async function addMessage(title, details, priority, img) {
         const message = Parse.Object.extend('message');
@@ -38,25 +43,43 @@ function Messages(props) {
         newMessage.set('priority', parseInt(priority));
         newMessage.set('img', new Parse.File(img.name, img));
         newMessage.set('createdBy', Parse.User.current());
+        newMessage.set('readBy',[activeUser.id])
         
         const parseMessage = await newMessage.save();
         setMessagesArr(messagesArr.concat(new MessageModel(parseMessage)));
     }
 
+    function updateMessage(id, title, details, priority, img) {
+        const message = Parse.Object.extend('message');
+        const query = new Parse.Query(message);
+        query.get(id).then((object) => {
+            object.set('title', title);
+            object.set('details', details);
+            object.set('priority', parseInt(priority));
+            object.set('img',  new Parse.File(img.name, img));
+            object.save().then((response) => {
+                console.log('Updated message', response);
+                const tmpArr = messagesArr.filter(item => item.id !== id);
+                setMessagesArr(tmpArr.concat(new MessageModel(response)));
+            }, (error) => {
+                console.error('Error while updating message', error);
+            });
+        });   
+    }
+
     function deleteMessage(id,index) {
-        console.log("delete id", id)
-        console.log("delete index", index)
-        // const Comment = Parse.Object.extend('Comment');
-        // const query = new Parse.Query(Comment);
-        // // here you put the objectId that you want to delete
-        // query.get(id).then((object) => {
-        // object.destroy().then((response) => {
-        //     console.log('Deleted Comment', response);
-        //     setMessagesArr(messagesArr.splice(index, 1));
-        // }, (error) => {
-        //     console.error('Error while deleting Comment', error);
-        // });
-        // });
+        const ParseMessage = Parse.Object.extend('message');
+        const query = new Parse.Query(ParseMessage);
+        // here you put the objectId that you want to delete
+        query.get(id).then((object) => {
+        object.destroy().then((response) => {
+            console.log('Deleted Comment', response);
+            const tmpArr = messagesArr.filter(item => item.id !== id);
+            setMessagesArr(tmpArr);
+        }, (error) => {
+            console.error('Error while deleting Comment', error);
+        });
+        });
     }
 
 
@@ -79,45 +102,43 @@ function Messages(props) {
             <div className="filters">
                 <Container>
                     <Row>
-                        <Col lg={6} md={12}>
+                        <Col lg={6} md={12} sm={12}>
                             <Form>
                                 <Form.Group controlId="formBasicSearch">
                                 <Form.Control value={searchByStr} type="text" placeholder="Filter by text in Title and Details" onChange={e => setSearchByStr(e.target.value)}/>
                                 </Form.Group>
                             </Form>
                         </Col>
-                        <Col lg={3} md={3}>
+                        <Col lg={3} md={6} sm={12}>
                             <DropdownButton value={filterByPriority} id="dropdown-basic-button" title={"Filter by Priority: " + filterByPriority} onSelect={e => setFilterByPriority(e)}>
                                 <Dropdown.Item eventKey="1" href="#">Information</Dropdown.Item>
                                 <Dropdown.Item eventKey="2" href="#">Warning</Dropdown.Item>
                                 <Dropdown.Item eventKey="3" href="#">Other</Dropdown.Item>
                             </DropdownButton>
                         </Col>
-                        <Col lg={3} md={3}>
+                        <Col lg={3} md={6} sm={12}>
                             <Form>
-                                <fieldset>
+                                {/* <fieldset> */}
                                     <Form.Group value={sortBy} as={Row} onChange={e => setSortBy(e.target.value)}>
                                         <Form.Label column as="legend" lg={5}>Sort By:</Form.Label>
                                         <Form.Check value="createdAt" type="radio" label="Date" name="formHorizontalRadios" id="formHorizontalRadios1" className="sort-by"/>
                                         <Form.Check value="priority" type="radio" label="Priority" name="formHorizontalRadios" id="formHorizontalRadios2" className="sort-by"/>
                                     </Form.Group>
-                                </fieldset>
+                                {/* </fieldset> */}
                             </Form>
                         </Col>
                     </Row>
                     <Row>
-                        <Col mr="auto">
+                        <Col className="new-msg-btn">
                             <Button variant="link" onClick={() => setShowModal(true)}>New Message</Button>
                         </Col>
                     </Row>
                 </Container>
                 
             </div>
-            <div className="new-msg-btn">
-                
-            </div>
+            
             <Container>
-                <MessagesView messages={filteredMsg} deleteMessage={deleteMessage}/>
+                <MessagesView messages={filteredMsg} activeUser={activeUser} deleteMessage={deleteMessage} updateMessageFromModal={updateMessage}/>
             </Container>
             <NewMessageModal show={showModal} handleClose={() => setShowModal(false)} addMessage={addMessage}/>
         </div>
