@@ -1,7 +1,6 @@
 // @flow
 import * as React from 'react';
-import { Carousel, CarouselItem, Col, Container, Image, Row } from 'react-bootstrap';
-import AppCard from '../../components/Card/Card';
+import { Carousel, Container, Row } from 'react-bootstrap';
 import { AppNavbar } from '../../components/Navbar/Navbar';
 import './HomePage.css';
 
@@ -16,7 +15,7 @@ export function HomePage(props) {
           <Row className="justify-content-md-center">
             <h1>Homeowner Association Management System</h1>
           </Row>
-          {/* <Row> */}
+          <Row>
           <Carousel>
             <Carousel.Item>
               <img
@@ -72,7 +71,7 @@ export function HomePage(props) {
                 desc="Useing this app will lead to much happyer tenants"
                 link="">
               </AppCard> */}
-          {/* </Row> */}
+          </Row>
         </Container>
       </div>
       </div>

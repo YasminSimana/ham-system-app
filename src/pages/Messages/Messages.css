@@ -26,3 +26,12 @@
     display: flex;
     justify-content: space-evenly;
 }
+
+.p-messages .sort-by {
+    margin: 2.5%;
+}
+
+/* .p-messages .new-msg-btn {
+    position: static;
+    left: 0;
+} */

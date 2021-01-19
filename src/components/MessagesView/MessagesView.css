@@ -1,0 +1,15 @@
+.c-msg-view .header-acc {
+    display: flex;
+    justify-content: space-between;
+}
+
+.c-msg-view .msg-comments-view {
+    display: flex;
+    justify-content: space-between;
+}
+
+.c-msg-view .msg-btm {
+    margin-top: 1%;
+    display: flex;
+    justify-content: space-evenly;
+}

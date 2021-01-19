@@ -3,6 +3,7 @@
     background-position: center; /* Center the image */
     background-repeat: no-repeat; /* Do not repeat the image */
     background-size: cover;
+    height: 100%;
 }
 
 .p-hp .center-col {
@@ -12,6 +13,7 @@
 .p-hp h1 {
     font-family: 'Pacifico', cursive;
     color: black;
+    margin-top: 20px;
 }
 
 .p-hp .row {
@@ -22,6 +24,12 @@
     width: 400px;
     border-radius: 22%;
     opacity: 0.75;
+}
+
+
+.p-hp .carousel {
+    position: absolute;
+    left: 20%;
 }
 
 .p-hp .carousel-item {

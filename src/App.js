@@ -1,10 +1,7 @@
-import logo from './logo.svg';
 import './App.css';
 import { HashRouter, Route, Switch } from 'react-router-dom';
 import { LogIn } from './pages/LogIn/LogIn';
 import { HomePage } from './pages/HomePage/HomePage';
-import { AppNavbar } from './components/Navbar/Navbar';
-import { Button } from 'react-bootstrap';
 import Issues from './pages/Issues/Issues';
 import { useState } from 'react';
 import Parse from 'parse';

@@ -2,7 +2,7 @@
 import * as React from 'react';
 import Parse from 'parse';
 import UserModel from '../../models/UserModel';
-import { Button, Form, FormCheck, FormControl, FormGroup, FormLabel, FormText } from 'react-bootstrap';
+import { Button, Form} from 'react-bootstrap';
 import { Redirect } from 'react-router';
 import './LogIn.css';
 
