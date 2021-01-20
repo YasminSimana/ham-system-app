@@ -6,12 +6,11 @@ import MessageModel from '../../models/MessageModel';
 import './Messages.css';
 import MessagesView from '../../components/MessagesView/MessagesView';
 import NewMessageModal from '../../components/NewMessageModal/NewMessageModal';
-import UpdateMessageModal from '../../components/UpdateMessageModal/UpdateMessageModal';
 
 function Messages(props) {
     const {activeUser, onLogOut} = props;
-    const [searchByStr, setSearchByStr] = useState("");
     const [messagesArr, setMessagesArr] = useState([]);
+    const [searchByStr, setSearchByStr] = useState("");
     const [filterByPriority, setFilterByPriority] = useState(null);
     const [sortBy, setSortBy] = useState("createdAt");
     const [showModal, setShowModal] = useState(false);
@@ -22,11 +21,11 @@ function Messages(props) {
             const query = new Parse.Query(parseMessage);
             const community = new Parse.Object.extend('Community');
             community.id = activeUser.community;
-            console.log("active user", activeUser.community)
+            console.log("active user", activeUser)
             query.equalTo("community", activeUser.community);
             const parseMessages = await query.find();
             setMessagesArr(parseMessages.map(item => new MessageModel(item)));
-            console.log("fetch", messagesArr);
+            console.log("messages arr", messagesArr);
         }
 
         if (activeUser) {
@@ -35,50 +34,51 @@ function Messages(props) {
     }, [activeUser])
 
     async function addMessage(title, details, priority, img) {
+        const community = Parse.Object.extend('Community');
+        const query = new Parse.Query(community);
         const message = Parse.Object.extend('message');
         const newMessage = new message();
+        const communityObject = await query.get(activeUser.community.id);
         
         newMessage.set('title', title);
         newMessage.set('details', details);
         newMessage.set('priority', parseInt(priority));
         newMessage.set('img', new Parse.File(img.name, img));
         newMessage.set('createdBy', Parse.User.current());
-        newMessage.set('readBy',[activeUser.id])
+        newMessage.set('readBy', [activeUser.id]);
+        newMessage.set('community', communityObject)
         
         const parseMessage = await newMessage.save();
         setMessagesArr(messagesArr.concat(new MessageModel(parseMessage)));
     }
 
-    function updateMessage(id, title, details, priority, img) {
+    async function updateMessage(id, title, details, priority, img) {
         const message = Parse.Object.extend('message');
         const query = new Parse.Query(message);
-        query.get(id).then((object) => {
-            object.set('title', title);
-            object.set('details', details);
-            object.set('priority', parseInt(priority));
-            object.set('img',  new Parse.File(img.name, img));
-            object.save().then((response) => {
-                console.log('Updated message', response);
-                const tmpArr = messagesArr.filter(item => item.id !== id);
-                setMessagesArr(tmpArr.concat(new MessageModel(response)));
+        const object = await query.get(id);
+        object.set('title', title);
+        object.set('details', details);
+        object.set('priority', parseInt(priority));
+        object.set('img',  new Parse.File(img.name, img));
+        object.save().then((response) => {
+            console.log('Updated message', response);
+            const tmpArr = messagesArr.filter(item => item.id !== id);
+            setMessagesArr(tmpArr.concat(new MessageModel(response)));
             }, (error) => {
                 console.error('Error while updating message', error);
-            });
-        });   
+            });  
     }
 
-    function deleteMessage(id,index) {
+    async function deleteMessage(id,index) {
         const ParseMessage = Parse.Object.extend('message');
         const query = new Parse.Query(ParseMessage);
-        // here you put the objectId that you want to delete
-        query.get(id).then((object) => {
+        const object = await query.get(id);
         object.destroy().then((response) => {
-            console.log('Deleted Comment', response);
+            console.log('Deleted message', response);
             const tmpArr = messagesArr.filter(item => item.id !== id);
             setMessagesArr(tmpArr);
         }, (error) => {
-            console.error('Error while deleting Comment', error);
-        });
+            console.error('Error while deleting message', error);
         });
     }
 
@@ -118,13 +118,11 @@ function Messages(props) {
                         </Col>
                         <Col lg={3} md={6} sm={12}>
                             <Form>
-                                {/* <fieldset> */}
-                                    <Form.Group value={sortBy} as={Row} onChange={e => setSortBy(e.target.value)}>
-                                        <Form.Label column as="legend" lg={5}>Sort By:</Form.Label>
-                                        <Form.Check value="createdAt" type="radio" label="Date" name="formHorizontalRadios" id="formHorizontalRadios1" className="sort-by"/>
-                                        <Form.Check value="priority" type="radio" label="Priority" name="formHorizontalRadios" id="formHorizontalRadios2" className="sort-by"/>
-                                    </Form.Group>
-                                {/* </fieldset> */}
+                                <Form.Group value={sortBy} as={Row} onChange={e => setSortBy(e.target.value)}>
+                                    <Form.Label column as="legend" lg={5}>Sort By:</Form.Label>
+                                    <Form.Check value="createdAt" type="radio" label="Date" name="formHorizontalRadios" id="formHorizontalRadios1" className="sort-by"/>
+                                    <Form.Check value="priority" type="radio" label="Priority" name="formHorizontalRadios" id="formHorizontalRadios2" className="sort-by"/>
+                                </Form.Group>
                             </Form>
                         </Col>
                     </Row>
