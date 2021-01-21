@@ -1,0 +1,28 @@
+.c-tenant-view .header-acc {
+    display: flex;
+    justify-content: space-between;
+}
+
+.c-tenant-view .msg-comments-view {
+    display: flex;
+    justify-content: space-between;
+}
+
+.c-tenant-view .msg-btm {
+    margin-top: 1%;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.c-tenant-view .add-comment-btn{
+    display: none;
+}
+
+.c-tenant-view .tenant-body {
+    display: flex;
+    justify-content: space-between;
+}
+
+.c-tenant-view .tenant-info {
+    text-align: left;
+}

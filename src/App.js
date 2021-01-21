@@ -8,6 +8,8 @@ import { useState } from 'react';
 import Parse from 'parse';
 import UserModel from './models/UserModel';
 import Messages from './pages/Messages/Messages';
+import Votings from './pages/Votings/Votings';
+import Tenants from './pages/Tenants/Tenants';
 
 function App() {
   const [activeUser, setActiveUser] = useState(
@@ -36,7 +38,9 @@ function App() {
       <HashRouter>
         <Switch>
           <Route exact path="/"><HomePage activeUser={activeUser} onLogOut={handleLogout}/></Route>
+          <Route exact path="/tenants"><Tenants activeUser={activeUser} onLogOut={handleLogout}/>{redirect ? <Redirect to="/" /> : null}</Route>
           <Route exact path="/messages"><Messages activeUser={activeUser} onLogOut={handleLogout}/>{redirect ? <Redirect to="/" /> : null}</Route>
+          <Route exact path="/votings"><Votings activeUser={activeUser} onLogOut={handleLogout}/>{redirect ? <Redirect to="/" /> : null}</Route>
           <Route exact path="/issues"><Issues activeUser={activeUser} onLogOut={handleLogout}/>{redirect ? <Redirect to="/" /> : null}</Route>
           <Route exact path="/login"><LogIn onLogIn={handleLogin}/></Route>
           <Route exact path="/signup"><SignUp onSignUp={handleSignup}/></Route>

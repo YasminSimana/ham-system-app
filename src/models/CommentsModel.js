@@ -6,6 +6,7 @@ class CommentsModel {
         this.createdAt = results.get("createdAt");
         this.description = results.get("description");
         this.user = results.get("user");
+        this.parseComment = results;
     }
 }
 

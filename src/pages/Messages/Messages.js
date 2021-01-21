@@ -60,26 +60,20 @@ function Messages(props) {
         object.set('details', details);
         object.set('priority', parseInt(priority));
         object.set('img',  new Parse.File(img.name, img));
-        object.save().then((response) => {
-            console.log('Updated message', response);
-            const tmpArr = messagesArr.filter(item => item.id !== id);
-            setMessagesArr(tmpArr.concat(new MessageModel(response)));
-            }, (error) => {
-                console.error('Error while updating message', error);
-            });  
+        const response = await object.save();
+        console.log('Updated message', response);
+        const tmpArr = messagesArr.filter(item => item.id !== id);
+        setMessagesArr(tmpArr.concat(new MessageModel(response))); 
     }
 
-    async function deleteMessage(id,index) {
+    async function deleteMessage(id) {
         const ParseMessage = Parse.Object.extend('message');
         const query = new Parse.Query(ParseMessage);
         const object = await query.get(id);
-        object.destroy().then((response) => {
-            console.log('Deleted message', response);
-            const tmpArr = messagesArr.filter(item => item.id !== id);
-            setMessagesArr(tmpArr);
-        }, (error) => {
-            console.error('Error while deleting message', error);
-        });
+        const response = await object.destroy();
+        console.log('Deleted message', response);
+        const tmpArr = messagesArr.filter(item => item.id !== id);
+        setMessagesArr(tmpArr);
     }
 
 
@@ -119,7 +113,7 @@ function Messages(props) {
                         <Col lg={3} md={6} sm={12}>
                             <Form>
                                 <Form.Group value={sortBy} as={Row} onChange={e => setSortBy(e.target.value)}>
-                                    <Form.Label column as="legend" lg={5}>Sort By:</Form.Label>
+                                    <Form.Label column as="legend" sm={5}>Sort By:</Form.Label>
                                     <Form.Check value="createdAt" type="radio" label="Date" name="formHorizontalRadios" id="formHorizontalRadios1" className="sort-by"/>
                                     <Form.Check value="priority" type="radio" label="Priority" name="formHorizontalRadios" id="formHorizontalRadios2" className="sort-by"/>
                                 </Form.Group>

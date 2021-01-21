@@ -1,93 +1,81 @@
 import { useState } from 'react';
 import { Button, Col, Form, Image, Modal, Row } from 'react-bootstrap';
 
-function NewMessageModal(props) {
-    const { show, handleClose, addMessage } = props;
+function NewVotingModal(props) {
+    const { show, handleClose, addVoting } = props;
     const [title, setTitle] = useState("");
     const [details, setDetails] = useState("");
-    const [priority, setPriority] = useState(1);
-    const [img, setImg] = useState("");
-    // const [imgWasSet, setImgWasSet] = useState("");
+    const [endDate, setEndDate] = useState(new Date());
+    const [options, setOptions] = useState([]);
     
     function closeModal() {
       setTitle("");
       setDetails("");
-      setPriority(null);
-      setImg(null);
+      setEndDate(null);
+      setOptions(null);
       handleClose();
     }
 
-    function handleFileChange(e) {
-      if (e.target.files.length === 1) {
-          setImg(e.target.files[0]);
-      } else {
-          setImg(null);
-      }
-    }
-
     function handleAddMessage() {
-      addMessage(title, details, priority, img);
+      addVoting(title, details, endDate, options);
       closeModal();
     }
   
-    const imgURL = img ? URL.createObjectURL(img) : "";
-
     return (
-      <Modal show={show} onHide={closeModal} size="xl" className="c-new-message-modal">
+      <Modal show={show} onHide={closeModal} size="xl" className="c-new-voting-modal">
           <Modal.Header closeButton>
-              <Modal.Title>New Message</Modal.Title>
+              <Modal.Title>New Voting</Modal.Title>
           </Modal.Header>
           <Modal.Body>
               <Form>
                 
                   <Form.Group as={Row} controlId="formHorizontalName">
                       <Form.Label column sm={2}>
-                          Message Title
+                          Voting Title
                       </Form.Label>
                       <Col sm={10}>
-                          <Form.Control type="text" placeholder="Message Title" value={title} onChange={e => setTitle(e.target.value)} />
+                          <Form.Control type="text" placeholder="Voting Title" value={title} onChange={e => setTitle(e.target.value)} />
                       </Col>
                   </Form.Group>
 
                   <Form.Group as={Row} controlId="formHorizontalDesc">
                       <Form.Label column sm={2}>
-                          Message Details
+                        Voting Details
                       </Form.Label>
                       <Col sm={10}>
-                          <Form.Control type="text" placeholder="Message Details" value={details} onChange={e => setDetails(e.target.value)}  />
+                          <Form.Control type="text" placeholder="Voting Details" value={details} onChange={e => setDetails(e.target.value)}  />
                       </Col>
                   </Form.Group>
 
                   <Form.Group as={Row} controlId="formHorizontalDesc">
                       <Form.Label column sm={2}>
-                          Message Priority
+                        Voting End Date
                       </Form.Label>
                       <Col sm={10}>
-                          <Form.Control type="number" placeholder="Message Priority" value={priority} onChange={e => setPriority(e.target.value)}  />
+                          <Form.Control type="date" placeholder="Voting End Date" value={endDate} onChange={e => setEndDate(e.target.value)}  />
                       </Col>
                   </Form.Group>
 
                   <Form.Group as={Row} controlId="formHorizontalImage">
                       <Form.Label column sm={2}>
-                          Message Image
+                        Voting Options
                       </Form.Label>
                       <Col sm={10}>
-                          <Form.Control type="file" accept="image/*" onChange={handleFileChange} />
+                        <Form.Control type="number" placeholder="Voting Options" value={options} onChange={e => setOptions(e.target.value)}  />
                       </Col>
                   </Form.Group>
               </Form>
-              <Image src={imgURL} className="img-preview"/>
           </Modal.Body>
           <Modal.Footer>
               <Button variant="secondary" onClick={closeModal}>
                   Cancel
               </Button>
               <Button variant="primary" onClick={handleAddMessage}>
-                  Create Message
+                  Create Voting
               </Button>
           </Modal.Footer>
       </Modal>
   );
   }
 
-export default NewMessageModal;
+export default NewVotingModal;

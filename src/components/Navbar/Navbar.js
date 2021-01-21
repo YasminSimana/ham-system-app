@@ -14,7 +14,9 @@ export function AppNavbar(props) {
         <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mr-auto">
               {activeUser ? <Nav.Link href="#/">Home</Nav.Link> : null}
+              {activeUser ? <Nav.Link href="#/tenants">Tenants</Nav.Link> : null}
               {activeUser ? <Nav.Link href="#/messages">Messages</Nav.Link> : null}
+              {activeUser ? <Nav.Link href="#/votings">Votings</Nav.Link> : null}
               {activeUser ? <Nav.Link href="#/issues">Issues</Nav.Link> : null}
             </Nav>
             <Nav className="ml-auto">

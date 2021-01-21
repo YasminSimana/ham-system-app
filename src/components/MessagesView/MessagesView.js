@@ -9,35 +9,33 @@ import UpdateMessageModal from '../UpdateMessageModal/UpdateMessageModal';
 
 function MessagesView(props) {
     const {messages, activeUser, deleteMessage, updateMessageFromModal} = props;
-    const [selectedMsg, setSelectedMsg] = useState(0);
+    const [selectedMsg, setSelectedMsg] = useState(null);
     const [commentsArr, setCommentsArr] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [addComment, setAddComment] = useState("");
     const [loading, setLoading] = useState(true);
 
     useEffect(()=> {
-        async function fetchMessage() {
-            const parseMessage = Parse.Object.extend('message');
-            const query = new Parse.Query(parseMessage);
-            console.log("msg 1", messages[selectedMsg])
-            const parseMessageData = await query.get(messages[selectedMsg].id);
-            fetchCommentsData(parseMessageData);
-        }
+        // async function fetchMessage() {
+        //     debugger;
+        //     const parseMessage = Parse.Object.extend('message');
+        //     const query = new Parse.Query(parseMessage);
+        //     console.log("selected message", messages[selectedMsg])
+        //     const parseMessageData = await query.get(messages[selectedMsg].id);
+        //     fetchCommentsData(parseMessageData);
+        // }
 
         async function fetchCommentsData(msg) {
-            console.log("msg", msg)
             const parseComment = Parse.Object.extend('Comment');
             const query = new Parse.Query(parseComment);
-            // const message = new Parse.Object.extend('message');
-            // message.id = messages[selectedMsg].id;
-            query.equalTo("msg", msg);
+            query.equalTo("msg", messages[selectedMsg].parseMsg);
             const parseComments = await query.find();
             setCommentsArr(parseComments.map(item => new CommentsModel(item)));
             setLoading(false);
-            console.log("fetch", commentsArr);
+            console.log("comments arr", commentsArr);
         }
-            if (selectedMsg) {
-                fetchMessage();
+            if (selectedMsg !== null) {
+                fetchCommentsData();
             }
     }, [selectedMsg])
 
@@ -66,10 +64,10 @@ function MessagesView(props) {
         setSelectedMsg(eventKey);
 
         if (wasReadByUser(eventKey)){
-            console.log("mism2", messages[eventKey].readBy)
+            console.log("was read", messages[eventKey].readBy)
             return;
         } else {
-            console.log("mism", messages[eventKey].readBy)
+            console.log("wasn't read", messages[eventKey].readBy)
             messages[eventKey].readBy.push(activeUser.id)
             updateMessage(messages[eventKey].readBy);
         }
@@ -85,7 +83,6 @@ function MessagesView(props) {
     }
 
     async function addCommentToDB() {
-        // setLoading(true);
         const message = Parse.Object.extend('message');
         const query = new Parse.Query(message);
         const Comment = Parse.Object.extend('Comment');

@@ -9,6 +9,7 @@ class MessageModel {
         this.priority = results.get("priority");
         this.img = results.get("img").url();
         this.readBy = results.get("readBy");
+        this.parseMsg = results;
     }
 
     getIcon() {

@@ -1,0 +1,19 @@
+.c-voting-view .header-acc {
+    display: flex;
+    justify-content: space-between;
+}
+
+.c-voting-view .voting-btm {
+    margin-top: 1%;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.c-voting-view {
+    width: 100%;
+}
+
+.c-voting-view .end-date-section {
+    display: flex;
+    justify-content: space-between
+}
