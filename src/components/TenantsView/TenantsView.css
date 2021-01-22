@@ -8,10 +8,14 @@
     justify-content: space-between;
 }
 
-.c-tenant-view .msg-btm {
+.c-tenant-view .edit-btm {
     margin-top: 1%;
     display: flex;
     justify-content: space-evenly;
+}
+
+.c-tenant-view .edit-btm .btn{
+    margin: 1px;
 }
 
 .c-tenant-view .add-comment-btn{

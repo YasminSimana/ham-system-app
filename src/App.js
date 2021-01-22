@@ -10,6 +10,7 @@ import UserModel from './models/UserModel';
 import Messages from './pages/Messages/Messages';
 import Votings from './pages/Votings/Votings';
 import Tenants from './pages/Tenants/Tenants';
+import Dashboards from './pages/Dashboards/Dashboards';
 
 function App() {
   const [activeUser, setActiveUser] = useState(
@@ -38,6 +39,7 @@ function App() {
       <HashRouter>
         <Switch>
           <Route exact path="/"><HomePage activeUser={activeUser} onLogOut={handleLogout}/></Route>
+          <Route exact path="/dashboards"><Dashboards activeUser={activeUser} onLogOut={handleLogout}/>{redirect ? <Redirect to="/" /> : null}</Route>
           <Route exact path="/tenants"><Tenants activeUser={activeUser} onLogOut={handleLogout}/>{redirect ? <Redirect to="/" /> : null}</Route>
           <Route exact path="/messages"><Messages activeUser={activeUser} onLogOut={handleLogout}/>{redirect ? <Redirect to="/" /> : null}</Route>
           <Route exact path="/votings"><Votings activeUser={activeUser} onLogOut={handleLogout}/>{redirect ? <Redirect to="/" /> : null}</Route>

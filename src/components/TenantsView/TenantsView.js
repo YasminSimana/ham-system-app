@@ -5,11 +5,12 @@ import './TenantsView.css';
 import Parse from 'parse';
 import CommentsModel from '../../models/CommentsModel';
 import { BellFill } from 'react-bootstrap-icons';
-import UpdateMessageModal from '../UpdateMessageModal/UpdateMessageModal';
+import UpdateTenantsModal from '../UpdateTenantsModal/UpdateTenantsModal';
 
 function TenantsView(props) {
-    const {tenants, activeUser, deleteTenant, updateTenantInfoFromModal} = props;
+    const {tenants, activeUser, deleteTenant, updateTenantsInfoFromModal} = props;
     const [showModal, setShowModal] = useState(false);
+    const [selectedTenant, setSelectedTenant] = useState(null);
 
     // useEffect(()=> {
     //     // async function fetchMessage() {
@@ -111,7 +112,10 @@ function TenantsView(props) {
 
     const tenantsView = tenants.map((tenant, index) => {
         return <Card key={index}>
-            <Accordion.Toggle as={Card.Header} eventKey={'' + index}>
+            {console.log("tenents", tenants)}
+            {console.log("tenent[index]", tenants[index])}
+            {console.log("selectedTenant", selectedTenant)}
+            <Accordion.Toggle as={Card.Header} eventKey={'' + index} onClick={e=>setSelectedTenant(parseInt(index))}>
             <div className="header-acc">
                 {tenant.fname} {tenant.lname}
             </div>
@@ -130,7 +134,7 @@ function TenantsView(props) {
                         <p>Apt: {tenant.apartment}</p>
                     </div>
                     <div>
-                        <div className="msg-btm">
+                        <div className="edit-btm">
                             <Button onClick={() => setShowModal(true)}>Update</Button>
                             <Button onClick={ e=> deleteTenant(tenant.id, index)}>Delete</Button>
                         </div>
@@ -138,13 +142,24 @@ function TenantsView(props) {
                 </div>
             </Card.Body>
             </Accordion.Collapse>
-            {/* <UpdateMessageModal show={showModal} handleClose={() => setShowModal(false)} updateMessage={updateMessageFromModal} id={msg.id} currentTitle={msg.title} currentDetails={msg.details} currentPriority={msg.priority} currentImg={msg.img}/> */}
+            {console.log("tenent[selectedTenant]", tenants[selectedTenant])}
+            {(selectedTenant !== null) ? <UpdateTenantsModal
+                show={showModal} 
+                handleClose={() => setShowModal(false)} 
+                updateTenant={updateTenantsInfoFromModal} 
+                id={tenants[selectedTenant].id} 
+                currentFname={tenants[selectedTenant].fname} 
+                currentLname={tenants[selectedTenant].lname} 
+                currentEmail={tenants[selectedTenant].email}
+                currentBuilding={tenants[selectedTenant].building}
+                currentApartment={tenants[selectedTenant].apartment}
+                currentImg={tenants[selectedTenant].img}/> : null}
         </Card>
     });
-
+    console.log("tenants", tenants);
     return (
         <div className="c-tenant-view">
-            <Accordion defaultActiveKey="0">
+            <Accordion defaultActiveKey={selectedTenant}>
                 {tenantsView}
             </Accordion>
         </div>

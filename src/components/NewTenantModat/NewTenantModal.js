@@ -6,7 +6,6 @@ function NewTenantModal(props) {
     const [fname, setFname] = useState("");
     const [lname, setLname] = useState("");
     const [email, setEmail] = useState("");
-    const [pwd, setPwd] = useState("");
     const [building, setBuilding] = useState("");
     const [apartment, setApartment] = useState("");
     const [img, setImg] = useState("");
@@ -15,7 +14,6 @@ function NewTenantModal(props) {
       setFname("");
       setLname("");
       setEmail("");
-      setPwd("");
       setBuilding("");
       setApartment("");
       setImg(null);
@@ -29,9 +27,9 @@ function NewTenantModal(props) {
           setImg(null);
       }
     }
-
+    
     function handleAddTenant() {
-      addTenant(fname, lname, email, pwd, building, apartment, img);
+      addTenant(fname, lname, email, building, apartment, img);
       closeModal();
     }
   
@@ -46,55 +44,55 @@ function NewTenantModal(props) {
               <Form>
                 
                   <Form.Group as={Row} controlId="formHorizontalName">
-                      <Form.Label column sm={2}>
-                          Tenant First Name
+                      <Form.Label column sm={3}>
+                          First Name
                       </Form.Label>
-                      <Col sm={10}>
-                          <Form.Control type="text" placeholder="Tenant First Name" value={fname} onChange={e => setFname(e.target.value)} />
+                      <Col sm={9}>
+                          <Form.Control type="text" placeholder="First Name" value={fname} onChange={e => setFname(e.target.value)} />
                       </Col>
                   </Form.Group>
 
                   <Form.Group as={Row} controlId="formHorizontalDesc">
-                      <Form.Label column sm={2}>
-                        Tenant Last Name
+                      <Form.Label column sm={3}>
+                        Last Name
                       </Form.Label>
-                      <Col sm={10}>
-                          <Form.Control type="text" placeholder="Tenant Last Name" value={lname} onChange={e => setLname(e.target.value)}  />
+                      <Col sm={9}>
+                          <Form.Control type="text" placeholder="Last Name" value={lname} onChange={e => setLname(e.target.value)}  />
                       </Col>
                   </Form.Group>
 
                   <Form.Group as={Row} controlId="formHorizontalDesc">
-                      <Form.Label column sm={2}>
-                        Tenant Email Address
+                      <Form.Label column sm={3}>
+                        Email
                       </Form.Label>
-                      <Col sm={10}>
-                          <Form.Control type="email" placeholder="Tenant Email Address" value={email} onChange={e => setEmail(e.target.value)}  />
+                      <Col sm={9}>
+                          <Form.Control type="email" placeholder="Email Address" value={email} onChange={e => setEmail(e.target.value)}  />
                       </Col>
                   </Form.Group>
 
                   <Form.Group as={Row} controlId="formHorizontalDesc">
-                      <Form.Label column sm={2}>
+                      <Form.Label column sm={3}>
                         Building
                       </Form.Label>
-                      <Col sm={10}>
+                      <Col sm={9}>
                           <Form.Control type="text" placeholder="Building" value={building} onChange={e => setBuilding(e.target.value)}  />
                       </Col>
                   </Form.Group>
 
                   <Form.Group as={Row} controlId="formHorizontalDesc">
-                      <Form.Label column sm={2}>
+                      <Form.Label column sm={3}>
                         Apartment
                       </Form.Label>
-                      <Col sm={10}>
+                      <Col sm={9}>
                           <Form.Control type="text" placeholder="Apartment" value={apartment} onChange={e => setApartment(e.target.value)}  />
                       </Col>
                   </Form.Group>
 
                   <Form.Group as={Row} controlId="formHorizontalImage">
-                      <Form.Label column sm={2}>
-                          Tenant Image
+                      <Form.Label column sm={3}>
+                          Image
                       </Form.Label>
-                      <Col sm={10}>
+                      <Col sm={9}>
                           <Form.Control type="file" accept="image/*" onChange={handleFileChange} />
                       </Col>
                   </Form.Group>

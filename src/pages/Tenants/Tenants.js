@@ -22,9 +22,10 @@ function Tenants(props) {
             console.log("active user", activeUser)
             query.equalTo("community", activeUser.community);
             query.equalTo("isCommitteeMember", false);
+            query.equalTo("deleted", false);
             const parseUsers = await query.find();
             setTenantsArr(parseUsers.map(item => new UserModel(item)));
-            console.log("tenants arr", tenantsArr);
+            console.log("tenants arr", parseUsers);
         }
 
         if (activeUser) {
@@ -32,34 +33,52 @@ function Tenants(props) {
         }
     }, [activeUser])
 
-    async function addTenant(fname, lname, email, pwd, building, apartment, img) {
-        // const community = Parse.Object.extend('Community');
-        // const query = new Parse.Query(community);
-        // const message = Parse.Object.extend('message');
-        // const newMessage = new message();
-        // const communityObject = await query.get(activeUser.community.id);
-
-
-        const community = Parse.Object.extend('Community');
-        const query = new Parse.Query(community);
+    async function addTenant(fname, lname, email, building, apartment, img) {
         const user = Parse.Object.extend('User');
         const newUser = new user();
-        const communityObject = await query.get(activeUser.community.id);
-        
+        let acl = new Parse.ACL();
+        acl.setPublicWriteAccess( true );
+        acl.setPublicReadAccess( true);
+        newUser.setACL( acl );
         newUser.set('fname', fname);
         newUser.set('lname', lname);
+        newUser.set('username', fname + lname);
         newUser.set('email', email);
-        newUser.set('pwd', pwd);
+        newUser.set('fetchEmail', email);
+        newUser.set('password', "123");
         newUser.set('building', building);
         newUser.set('apartment', apartment);
         newUser.set('img', new Parse.File(img.name, img));
-        newUser.set('community', communityObject)
-        
-        const parseUser = await newUser.save();
-        setTenantsArr(tenantsArr.concat(new UserModel(parseUser)));
+        newUser.set('community', activeUser.parseUser.get("community"));
+        newUser.set('isCommitteeMember', false);
+        try {const parseUser = await newUser.save();
+            setTenantsArr(tenantsArr.concat(new UserModel(parseUser)));}
+        catch (error){
+            console.log("error", error);
+        }
     }
 
-    async function updateTenantInfo(id, title, details, priority, img) {
+    async function updateTenantInfo(id, fname, lname, email, building, apartment, img) {
+        const User = new Parse.User();
+        const query = new Parse.Query(User);
+        const user = await query.get(id);
+        user.set('fname', fname);
+        user.set('lname', lname);
+        user.set('email', email);
+        user.set('fetchEmail', email);
+        user.set('building', building);
+        user.set('apartment', apartment);
+        user.set('img',  new Parse.File(img.name, img));
+        try {
+            const response = await user.save();
+            console.log('Updated user', response);
+            const tmpArr = tenantsArr.filter(item => item.id !== id);
+            setTenantsArr(tmpArr.concat(new UserModel(response)));
+        }
+        catch(error) {
+            console.error('Error while updating user', error);
+        }
+
         // const message = Parse.Object.extend('message');
         // const query = new Parse.Query(message);
         // const object = await query.get(id);
@@ -74,6 +93,34 @@ function Tenants(props) {
     }
 
     async function deleteTenant(id) {
+        const User = new Parse.User();
+        const query = new Parse.Query(User);
+
+        const user = await query.get(id);
+        user.set('deleted', true);
+        try {
+            const response = await user.save();
+            console.log('Deleted user', response);
+            const tmpArr = tenantsArr.filter(item => item.id !== id);
+            setTenantsArr(tmpArr);
+        }
+        catch(error) {
+            console.error('Error while updating user', error);
+        }
+
+
+        // const User = new Parse.User();
+        // const query = new Parse.Query(User);
+        // const user = await query.get(id);
+  
+        // try { 
+        //     const response = await user.destroy();
+        //     console.log('Deleted user', response);
+        // }
+        // catch(error){
+        //     console.error('Error while deleting user', error);
+        // }
+
         // const ParseMessage = Parse.Object.extend('message');
         // const query = new Parse.Query(ParseMessage);
         // const object = await query.get(id);

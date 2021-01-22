@@ -40,23 +40,25 @@ function Votings(props) {
         }
     }, [activeUser])
 
-    async function addVoting(title, details, priority, img) {
-        // const community = Parse.Object.extend('Community');
-        // const query = new Parse.Query(community);
-        // const message = Parse.Object.extend('message');
-        // const newMessage = new message();
-        // const communityObject = await query.get(activeUser.community.id);
+    async function addVoting(title, details, endDate, options) {
+        const Voting = Parse.Object.extend('Voting');
+        const myNewObject = new Voting();
         
-        // newMessage.set('title', title);
-        // newMessage.set('details', details);
-        // newMessage.set('priority', parseInt(priority));
-        // newMessage.set('img', new Parse.File(img.name, img));
-        // newMessage.set('createdBy', Parse.User.current());
-        // newMessage.set('readBy', [activeUser.id]);
-        // newMessage.set('community', communityObject)
+        myNewObject.set('title', title);
+        myNewObject.set('details', details);
+        myNewObject.set('options', options);
+        myNewObject.set('endDate', new Date(endDate));
+        myNewObject.set('community', activeUser.parseUser.get("community"));
+        myNewObject.set('results', []);
         
-        // const parseMessage = await newMessage.save();
-        // setMessagesArr(messagesArr.concat(new MessageModel(parseMessage)));
+        try{
+            const result = await myNewObject.save();
+            console.log('Voting created', result);
+            setActiveVotingsArr(activeVotingsArr.concat(new VotingModel(result)))
+        }
+        catch(error){
+            console.error('Error while creating Voting: ', error);
+        }
     }
 
     async function updateVoting(id, title, details, priority, img) {

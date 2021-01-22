@@ -6,6 +6,7 @@ import Parse from 'parse';
 import CommentsModel from '../../models/CommentsModel';
 import { BellFill } from 'react-bootstrap-icons';
 import UpdateMessageModal from '../UpdateMessageModal/UpdateMessageModal';
+import { Redirect } from 'react-router';
 
 function MessagesView(props) {
     const {messages, activeUser, deleteMessage, updateMessageFromModal} = props;
@@ -39,6 +40,9 @@ function MessagesView(props) {
             }
     }, [selectedMsg])
 
+    if(!activeUser) {
+        <Redirect to="/" />
+    }
 
     async function updateMessage(readBy){
         const message = Parse.Object.extend('message');
@@ -113,12 +117,12 @@ function MessagesView(props) {
             {console.log("user", comment.user.id)}
         </div>)
 
-    const messagesView = messages.map(msg => {
+    const messagesView = messages.map((msg,index) => {
         return <Card key={messages.indexOf(msg)}>
-            <Accordion.Toggle as={Card.Header} eventKey={'' + messages.indexOf(msg)}  onClick={e=>msgOnClick(messages.indexOf(msg))}>
+            <Accordion.Toggle as={Card.Header} eventKey={'' + index}  onClick={e=>msgOnClick(index)}>
             <div className="header-acc">
                 <div>
-                    {wasReadByUser(messages.indexOf(msg)) ? null : <BellFill/>}
+                    {wasReadByUser(index) ? null : <BellFill/>}
                     {msg.title}
                 </div>
                 <div>
@@ -126,7 +130,7 @@ function MessagesView(props) {
                 </div>
             </div>
             </Accordion.Toggle>
-            <Accordion.Collapse eventKey={'' + messages.indexOf(msg)}>
+            <Accordion.Collapse eventKey={'' + index}>
                 
             <Card.Body>
                 <div className="msg-comments-view">
@@ -170,7 +174,15 @@ function MessagesView(props) {
                 </div>
             </Card.Body>
             </Accordion.Collapse>
-            <UpdateMessageModal show={showModal} handleClose={() => setShowModal(false)} updateMessage={updateMessageFromModal} id={msg.id} currentTitle={msg.title} currentDetails={msg.details} currentPriority={msg.priority} currentImg={msg.img}/>
+            {(selectedMsg !== null) ? <UpdateMessageModal 
+                show={showModal} 
+                handleClose={() => setShowModal(false)} 
+                updateMessage={updateMessageFromModal} 
+                id={messages[selectedMsg].id} 
+                currentTitle={messages[selectedMsg].title} 
+                currentDetails={messages[selectedMsg].details} 
+                currentPriority={messages[selectedMsg].priority} 
+                currentImg={messages[selectedMsg].img}/> : null}
         </Card>
     });
 
