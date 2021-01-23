@@ -8,7 +8,7 @@ import MessagesView from '../../components/MessagesView/MessagesView';
 import NewMessageModal from '../../components/NewMessageModal/NewMessageModal';
 
 function Messages(props) {
-    const {activeUser, onLogOut} = props;
+    const {activeUser, users, onLogOut} = props;
     const [messagesArr, setMessagesArr] = useState([]);
     const [searchByStr, setSearchByStr] = useState("");
     const [filterByPriority, setFilterByPriority] = useState(null);
@@ -33,7 +33,7 @@ function Messages(props) {
         }
     }, [activeUser])
 
-    async function addMessage(title, details, priority, img) {
+    async function addMessage(title, details, priority, priorityName, img) {
         const community = Parse.Object.extend('Community');
         const query = new Parse.Query(community);
         const message = Parse.Object.extend('message');
@@ -43,6 +43,7 @@ function Messages(props) {
         newMessage.set('title', title);
         newMessage.set('details', details);
         newMessage.set('priority', parseInt(priority));
+        newMessage.set('priorityName', parseInt(priorityName));
         newMessage.set('img', new Parse.File(img.name, img));
         newMessage.set('createdBy', Parse.User.current());
         newMessage.set('readBy', [activeUser.id]);
@@ -58,7 +59,8 @@ function Messages(props) {
         const object = await query.get(id);
         object.set('title', title);
         object.set('details', details);
-        object.set('priority', parseInt(priority));
+        // object.set('priority', parseInt(priority));
+        object.set('priorityName', priority);
         object.set('img',  new Parse.File(img.name, img));
         const response = await object.save();
         console.log('Updated message', response);
@@ -78,7 +80,7 @@ function Messages(props) {
 
 
     //convert data to presentation
-    const filteredMsg = messagesArr.filter(msg => (msg.title.includes(searchByStr) || msg.details.includes(searchByStr)) && (filterByPriority ? msg.priority === parseInt(filterByPriority) : true));
+    const filteredMsg = messagesArr.filter(msg => (msg.title.includes(searchByStr) || msg.details.includes(searchByStr)) && (filterByPriority ? msg.priority === filterByPriority : true));
 
     filteredMsg.sort((msg1, msg2) => {
         if(msg1[sortBy] > msg2[sortBy]){
@@ -105,9 +107,8 @@ function Messages(props) {
                         </Col>
                         <Col lg={3} md={6} sm={12}>
                             <DropdownButton value={filterByPriority} id="dropdown-basic-button" title={"Filter by Priority: " + filterByPriority} onSelect={e => setFilterByPriority(e)}>
-                                <Dropdown.Item eventKey="1" href="#">Information</Dropdown.Item>
-                                <Dropdown.Item eventKey="2" href="#">Warning</Dropdown.Item>
-                                <Dropdown.Item eventKey="3" href="#">Other</Dropdown.Item>
+                                <Dropdown.Item eventKey="Info" href="#">Info</Dropdown.Item>
+                                <Dropdown.Item eventKey="Important" href="#">Important</Dropdown.Item>
                             </DropdownButton>
                         </Col>
                         <Col lg={3} md={6} sm={12}>
@@ -130,7 +131,7 @@ function Messages(props) {
             </div>
             
             <Container>
-                <MessagesView messages={filteredMsg} activeUser={activeUser} deleteMessage={deleteMessage} updateMessageFromModal={updateMessage}/>
+                <MessagesView messages={filteredMsg} activeUser={activeUser} users={users} deleteMessage={deleteMessage} updateMessageFromModal={updateMessage}/>
             </Container>
             <NewMessageModal show={showModal} handleClose={() => setShowModal(false)} addMessage={addMessage}/>
         </div>

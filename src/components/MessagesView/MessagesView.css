@@ -17,3 +17,22 @@
 .c-msg-view .add-comment-btn{
     display: none;
 }
+
+.c-msg-view .msg-data img {
+    width: 80%;
+}
+
+.c-msg-view .comments {
+    text-align: left;
+    width: 50%;
+}
+
+.c-msg-view .comments-data img, svg {
+    width: 10%;
+    height: 10%;
+    border-radius: 50%;
+}
+
+.c-msg-view .comments-data {
+    margin-bottom: 1em;
+}

@@ -4,12 +4,12 @@ import { Accordion, Button, Card, Form, FormControl, InputGroup } from 'react-bo
 import './MessagesView.css';
 import Parse from 'parse';
 import CommentsModel from '../../models/CommentsModel';
-import { BellFill } from 'react-bootstrap-icons';
+import { BellFill, PersonCircle } from 'react-bootstrap-icons';
 import UpdateMessageModal from '../UpdateMessageModal/UpdateMessageModal';
 import { Redirect } from 'react-router';
 
 function MessagesView(props) {
-    const {messages, activeUser, deleteMessage, updateMessageFromModal} = props;
+    const {messages, activeUser, users, deleteMessage, updateMessageFromModal} = props;
     const [selectedMsg, setSelectedMsg] = useState(null);
     const [commentsArr, setCommentsArr] = useState([]);
     const [showModal, setShowModal] = useState(false);
@@ -41,14 +41,16 @@ function MessagesView(props) {
     }, [selectedMsg])
 
     if(!activeUser) {
-        <Redirect to="/" />
+        return <Redirect to="/" />
     }
 
-    async function updateMessage(readBy){
+    async function updateMessage(readBy, index){
         const message = Parse.Object.extend('message');
         const query = new Parse.Query(message);
         try {
-            const object = await query.get(messages[selectedMsg].id);
+            console.log("here", messages)
+            console.log("here2", index)
+            const object = await query.get(messages[index].id);
             object.set('readBy', readBy);
             try{
                 const response = await object.save();
@@ -73,7 +75,7 @@ function MessagesView(props) {
         } else {
             console.log("wasn't read", messages[eventKey].readBy)
             messages[eventKey].readBy.push(activeUser.id)
-            updateMessage(messages[eventKey].readBy);
+            updateMessage(messages[eventKey].readBy, eventKey);
         }
     }
 
@@ -110,12 +112,13 @@ function MessagesView(props) {
     }
 
     //convert data to presentation
-    const commentsView = commentsArr.map(comment => 
-        <div key={comment.id}>
-            <div>{comment.user.id}</div>
+    const commentsView = commentsArr.map(comment => {
+        const user = users.find(user => user.id === comment.user.id);
+        return <div className="comments-data" key={comment.id}>
+            <div>{user.img ? <img src={user.img}></img> : <PersonCircle/>} {user.getFullName()}:</div>
             <div>{comment.description}</div>
-            {console.log("user", comment.user.id)}
-        </div>)
+            {console.log("comment user", comment.parseComment)}
+        </div>})
 
     const messagesView = messages.map((msg,index) => {
         return <Card key={messages.indexOf(msg)}>
@@ -134,16 +137,16 @@ function MessagesView(props) {
                 
             <Card.Body>
                 <div className="msg-comments-view">
-                    <div>
+                    <div className="msg-data">
                         <img src={msg.img}></img>
                         <p>
                             Details: {msg.details}
                         </p>
                         <p>
-                            Priority: {msg.getPriorityName()}
+                            Priority: {msg.priority}
                         </p>
                     </div>
-                    <div>
+                    <div className="comments">
                         <p>
                             Comments:
                         </p>
@@ -167,14 +170,14 @@ function MessagesView(props) {
                             
                             <div className="msg-btm">
                                 <Button onClick={() => setShowModal(true)}>Update</Button>
-                                <Button onClick={ e=> deleteMessage(msg.id, messages.indexOf(msg))}>Delete</Button>
+                                <Button onClick={ e=> deleteMessage(msg.id)}>Delete</Button>
                             </div>
                         </div>
                     </div>
                 </div>
             </Card.Body>
             </Accordion.Collapse>
-            {(selectedMsg !== null) ? <UpdateMessageModal 
+            {/* {(selectedMsg !== null && messages) ? <UpdateMessageModal
                 show={showModal} 
                 handleClose={() => setShowModal(false)} 
                 updateMessage={updateMessageFromModal} 
@@ -182,7 +185,7 @@ function MessagesView(props) {
                 currentTitle={messages[selectedMsg].title} 
                 currentDetails={messages[selectedMsg].details} 
                 currentPriority={messages[selectedMsg].priority} 
-                currentImg={messages[selectedMsg].img}/> : null}
+                currentImg={messages[selectedMsg].img}/> : null} */}
         </Card>
     });
 
@@ -191,6 +194,16 @@ function MessagesView(props) {
             <Accordion defaultActiveKey={selectedMsg}>
                 {messagesView}
             </Accordion>
+            {(selectedMsg !== null && messages) ? <UpdateMessageModal
+                show={showModal} 
+                handleClose={() => setShowModal(false)} 
+                updateMessage={updateMessageFromModal} 
+                id={messages[selectedMsg].id} 
+                currentTitle={messages[selectedMsg].title} 
+                currentDetails={messages[selectedMsg].details} 
+                // currentPriority={messages[selectedMsg].priority}
+                currentPriority={messages[selectedMsg].priority} 
+                currentImg={messages[selectedMsg].img}/> : null}
         </div>
     );
 }

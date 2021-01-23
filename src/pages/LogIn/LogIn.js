@@ -29,7 +29,7 @@ export function LogIn(props) {
   }
 
   if (redirect) {
-    return <Redirect to="/" />;
+    return <Redirect to="/dashboards" />;
   }
 
   return (

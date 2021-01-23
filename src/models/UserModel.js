@@ -7,9 +7,13 @@ class UserModel {
         this.building = parseUser.get("building");
         this.apartment = parseUser.get("apartment");
         this.isCommitteeMember = parseUser.get("isCommitteeMember");
-        this.img = parseUser.get("img").url();
+        this.img = parseUser.get("img") ? parseUser.get("img").url() : null;
         this.community = parseUser.get("community");
         this.parseUser = parseUser;
+    }
+
+    getFullName(){
+        return this.fname + " " + this.lname;
     }
 }
 
