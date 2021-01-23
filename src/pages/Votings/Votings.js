@@ -19,7 +19,7 @@ function Votings(props) {
     const [showModal, setShowModal] = useState(false);
 
     useEffect(()=> {
-        async function fetchVotingData() {
+        async function fetchVotingsData() {
             const Voting = Parse.Object.extend('Voting');
             const query = new Parse.Query(Voting);
             query.equalTo("community", activeUser.community);
@@ -33,7 +33,7 @@ function Votings(props) {
         }
 
         if (activeUser) {
-            fetchVotingData();
+            fetchVotingsData();
         }
         else {
             return <Redirect to="/" />;
