@@ -8,80 +8,18 @@ import MessagesView from '../../components/MessagesView/MessagesView';
 import NewMessageModal from '../../components/NewMessageModal/NewMessageModal';
 
 function Messages(props) {
-    const {activeUser, users, onLogOut} = props;
+    const {activeUser, users, messages, addMessage, updateMessage, deleteMessage, onLogOut} = props;
     const [messagesArr, setMessagesArr] = useState([]);
     const [searchByStr, setSearchByStr] = useState("");
     const [filterByPriority, setFilterByPriority] = useState(null);
     const [sortBy, setSortBy] = useState("createdAt");
     const [showModal, setShowModal] = useState(false);
 
-    useEffect(()=> {
-        async function fetchMessagesData() {
-            const parseMessage = Parse.Object.extend('message');
-            const query = new Parse.Query(parseMessage);
-            const community = new Parse.Object.extend('Community');
-            community.id = activeUser.community;
-            console.log("active user", activeUser)
-            query.equalTo("community", activeUser.community);
-            const parseMessages = await query.find();
-            setMessagesArr(parseMessages.map(item => new MessageModel(item)));
-            console.log("messages arr", messagesArr);
-        }
-
-        if (activeUser) {
-            fetchMessagesData();
-        }
-    }, [activeUser])
-
-    async function addMessage(title, details, priority, priorityName, img) {
-        const community = Parse.Object.extend('Community');
-        const query = new Parse.Query(community);
-        const message = Parse.Object.extend('message');
-        const newMessage = new message();
-        const communityObject = await query.get(activeUser.community.id);
-        
-        newMessage.set('title', title);
-        newMessage.set('details', details);
-        newMessage.set('priority', parseInt(priority));
-        newMessage.set('priorityName', parseInt(priorityName));
-        newMessage.set('img', new Parse.File(img.name, img));
-        newMessage.set('createdBy', Parse.User.current());
-        newMessage.set('readBy', [activeUser.id]);
-        newMessage.set('community', communityObject)
-        
-        const parseMessage = await newMessage.save();
-        setMessagesArr(messagesArr.concat(new MessageModel(parseMessage)));
-    }
-
-    async function updateMessage(id, title, details, priority, img) {
-        const message = Parse.Object.extend('message');
-        const query = new Parse.Query(message);
-        const object = await query.get(id);
-        object.set('title', title);
-        object.set('details', details);
-        // object.set('priority', parseInt(priority));
-        object.set('priorityName', priority);
-        object.set('img',  new Parse.File(img.name, img));
-        const response = await object.save();
-        console.log('Updated message', response);
-        const tmpArr = messagesArr.filter(item => item.id !== id);
-        setMessagesArr(tmpArr.concat(new MessageModel(response))); 
-    }
-
-    async function deleteMessage(id) {
-        const ParseMessage = Parse.Object.extend('message');
-        const query = new Parse.Query(ParseMessage);
-        const object = await query.get(id);
-        const response = await object.destroy();
-        console.log('Deleted message', response);
-        const tmpArr = messagesArr.filter(item => item.id !== id);
-        setMessagesArr(tmpArr);
-    }
-
 
     //convert data to presentation
-    const filteredMsg = messagesArr.filter(msg => (msg.title.includes(searchByStr) || msg.details.includes(searchByStr)) && (filterByPriority ? msg.priority === filterByPriority : true));
-
+  
+    const filteredMsg = messages.filter(msg => {console.log("h2h2h2", msg); return (msg.title.includes(searchByStr) || msg.details.includes(searchByStr)) && (filterByPriority ? msg.priority === filterByPriority : true)});
+    
     filteredMsg.sort((msg1, msg2) => {
         if(msg1[sortBy] > msg2[sortBy]){
             return 1;
@@ -106,7 +44,7 @@ function Messages(props) {
                             </Form>
                         </Col>
                         <Col lg={3} md={6} sm={12}>
-                            <DropdownButton value={filterByPriority} id="dropdown-basic-button" title={"Filter by Priority: " + filterByPriority} onSelect={e => setFilterByPriority(e)}>
+                            <DropdownButton className="filter-btn" value={filterByPriority} id="dropdown-basic-button" title={"Filter by Priority: " + filterByPriority} onSelect={e => setFilterByPriority(e)}>
                                 <Dropdown.Item eventKey="Info" href="#">Info</Dropdown.Item>
                                 <Dropdown.Item eventKey="Important" href="#">Important</Dropdown.Item>
                             </DropdownButton>

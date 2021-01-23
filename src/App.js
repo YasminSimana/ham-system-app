@@ -24,13 +24,16 @@ function App() {
     async function fetchMessagesData() {
         const parseMessage = Parse.Object.extend('message');
         const query = new Parse.Query(parseMessage);
-        const community = new Parse.Object.extend('Community');
-        community.id = activeUser.community;
+        // const community = new Parse.Object.extend('Community');
+        // community.id = activeUser.community;
         console.log("active user", activeUser)
         query.equalTo("community", activeUser.community);
-        const parseMessages = await query.find();
+        try {const parseMessages = await query.find();
         setMessages(parseMessages.map(item => new MessageModel(item)));
-        console.log("messages arr", messages);
+        console.log("Success! messages arr: ", parseMessages);}
+        catch (error) {
+          console.log("Error! messages arr", error);
+        }
     }
 
     async function fetchUsersData() {
@@ -68,6 +71,57 @@ function App() {
     setRedirect(false);
   }
 
+  async function addMessage(title, details, priority, img) {
+    // const community = Parse.Object.extend('Community');
+    // const query = new Parse.Query(community);
+    const message = Parse.Object.extend('message');
+    const newMessage = new message();
+    // const communityObject = await query.get(activeUser.community.id);
+    
+    newMessage.set('title', title);
+    newMessage.set('details', details);
+    newMessage.set('priorityName', priority);
+    newMessage.set('img', new Parse.File(img.name, img));
+    newMessage.set('createdBy', Parse.User.current());
+    newMessage.set('readBy', [activeUser.id]);
+    newMessage.set('community', activeUser.community)
+    
+    try {const parseMessage = await newMessage.save();
+      console.log("Success! add message: ", parseMessage)
+      setMessages(messages.concat(new MessageModel(parseMessage)));
+    } catch (error){
+      console.log("Error! add message", error);
+    }
+}
+
+async function updateMessage(id, title, details, priority, img) {
+    const message = Parse.Object.extend('message');
+    const query = new Parse.Query(message);
+    const object = await query.get(id);
+    object.set('title', title);
+    object.set('details', details);
+    // object.set('priority', parseInt(priority));
+    object.set('priorityName', priority);
+    object.set('img',  new Parse.File(img.name, img));
+    try {const response = await object.save();
+      console.log('Success! updated message', response);
+      const tmpArr = messages.filter(item => item.id !== id);
+      setMessages(tmpArr.concat(new MessageModel(response)));
+    } catch (error) {
+      console.log("Error! update message", error);
+    } 
+}
+
+async function deleteMessage(id) {
+    const ParseMessage = Parse.Object.extend('message');
+    const query = new Parse.Query(ParseMessage);
+    const object = await query.get(id);
+    const response = await object.destroy();
+    console.log('Deleted message', response);
+    const tmpArr = messages.filter(item => item.id !== id);
+    setMessages(tmpArr);
+}
+
   return (
     <div className="App">
       <HashRouter>
@@ -75,7 +129,7 @@ function App() {
           <Route exact path="/"><HomePage activeUser={activeUser} onLogOut={handleLogout}/></Route>
           <Route exact path="/dashboards"><Dashboards activeUser={activeUser} onLogOut={handleLogout}/>{redirect ? <Redirect to="/" /> : null}</Route>
           <Route exact path="/tenants"><Tenants activeUser={activeUser} onLogOut={handleLogout}/>{redirect ? <Redirect to="/" /> : null}</Route>
-          <Route exact path="/messages"><Messages activeUser={activeUser} users={users} onLogOut={handleLogout}/>{redirect ? <Redirect to="/" /> : null}</Route>
+          <Route exact path="/messages"><Messages activeUser={activeUser} users={users} messages={messages} addMessage={addMessage} updateMessage={updateMessage} deleteMessage={deleteMessage} onLogOut={handleLogout}/>{redirect ? <Redirect to="/" /> : null}</Route>
           <Route exact path="/votings"><Votings activeUser={activeUser} onLogOut={handleLogout}/>{redirect ? <Redirect to="/" /> : null}</Route>
           <Route exact path="/issues"><Issues activeUser={activeUser} onLogOut={handleLogout}/>{redirect ? <Redirect to="/" /> : null}</Route>
           <Route exact path="/login"><LogIn onLogIn={handleLogin}/></Route>

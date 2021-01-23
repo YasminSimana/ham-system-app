@@ -4,7 +4,7 @@ import { Accordion, Button, Card, Form, FormControl, InputGroup } from 'react-bo
 import './MessagesView.css';
 import Parse from 'parse';
 import CommentsModel from '../../models/CommentsModel';
-import { BellFill, PersonCircle } from 'react-bootstrap-icons';
+import { BellFill, EnvelopeFill, EnvelopeOpen, PersonCircle } from 'react-bootstrap-icons';
 import UpdateMessageModal from '../UpdateMessageModal/UpdateMessageModal';
 import { Redirect } from 'react-router';
 
@@ -138,7 +138,7 @@ function MessagesView(props) {
             <Card.Body>
                 <div className="msg-comments-view">
                     <div className="msg-data">
-                        <img src={msg.img}></img>
+                        {msg.img ? <img src={msg.img}></img> : <EnvelopeOpen></EnvelopeOpen> }
                         <p>
                             Details: {msg.details}
                         </p>
@@ -194,7 +194,7 @@ function MessagesView(props) {
             <Accordion defaultActiveKey={selectedMsg}>
                 {messagesView}
             </Accordion>
-            {(selectedMsg !== null && messages) ? <UpdateMessageModal
+            {(selectedMsg !== null && messages && selectedMsg < messages.length) ? <UpdateMessageModal
                 show={showModal} 
                 handleClose={() => setShowModal(false)} 
                 updateMessage={updateMessageFromModal} 

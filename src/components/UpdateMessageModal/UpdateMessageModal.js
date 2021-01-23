@@ -67,7 +67,7 @@ function UpdateMessageModal(props) {
                           Message Priority
                       </Form.Label>
                       <Col sm={10}>
-                          <Form.Control type="number" placeholder={currentPriority} value={priority} onChange={e => setPriority(e.target.value)}  />
+                          <Form.Control type="text" placeholder={currentPriority} value={priority} onChange={e => setPriority(e.target.value)}  />
                       </Col>
                   </Form.Group>
 

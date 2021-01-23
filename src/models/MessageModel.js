@@ -8,7 +8,7 @@ class MessageModel {
         this.details = results.get("details");
         // this.priority = results.get("priority");
         this.priority = results.get("priorityName");
-        this.img = results.get("img").url();
+        this.img = results.get("img") ? results.get("img").url() : null;
         this.readBy = results.get("readBy");
         this.parseMsg = results;
     }
