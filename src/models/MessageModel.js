@@ -6,7 +6,6 @@ class MessageModel {
         this.createdAt = results.get("createdAt");
         this.title = results.get("title");
         this.details = results.get("details");
-        // this.priority = results.get("priority");
         this.priority = results.get("priorityName");
         this.img = results.get("img") ? results.get("img").url() : null;
         this.readBy = results.get("readBy");
@@ -20,14 +19,6 @@ class MessageModel {
             return <ExclamationTriangle/>
         }
     }
-
-    // getPriorityName() {
-    //     if(this.priority === 1){
-    //         return "Information"
-    //     } else if(this.priority === 2){
-    //         return "Warning"
-    //     }
-    // }
 }
 
 export default MessageModel;

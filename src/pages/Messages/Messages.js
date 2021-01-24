@@ -1,15 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { AppNavbar } from '../../components/Navbar/Navbar';
-import Parse from 'parse';
 import { Button, Col, Container, Dropdown, DropdownButton, Form, Row } from 'react-bootstrap';
-import MessageModel from '../../models/MessageModel';
 import './Messages.css';
 import MessagesView from '../../components/MessagesView/MessagesView';
 import NewMessageModal from '../../components/NewMessageModal/NewMessageModal';
 
 function Messages(props) {
     const {activeUser, users, messages, addMessage, updateMessage, deleteMessage, onLogOut} = props;
-    const [messagesArr, setMessagesArr] = useState([]);
     const [searchByStr, setSearchByStr] = useState("");
     const [filterByPriority, setFilterByPriority] = useState(null);
     const [sortBy, setSortBy] = useState("createdAt");
@@ -18,7 +15,7 @@ function Messages(props) {
 
     //convert data to presentation
   
-    const filteredMsg = messages.filter(msg => {console.log("h2h2h2", msg); return (msg.title.includes(searchByStr) || msg.details.includes(searchByStr)) && (filterByPriority ? msg.priority === filterByPriority : true)});
+    const filteredMsg = messages.filter(msg => {return (msg.title.includes(searchByStr) || msg.details.includes(searchByStr)) && (filterByPriority ? msg.priority === filterByPriority : true)});
     
     filteredMsg.sort((msg1, msg2) => {
         if(msg1[sortBy] > msg2[sortBy]){

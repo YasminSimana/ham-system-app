@@ -201,7 +201,6 @@ function MessagesView(props) {
                 id={messages[selectedMsg].id} 
                 currentTitle={messages[selectedMsg].title} 
                 currentDetails={messages[selectedMsg].details} 
-                // currentPriority={messages[selectedMsg].priority}
                 currentPriority={messages[selectedMsg].priority} 
                 currentImg={messages[selectedMsg].img}/> : null}
         </div>

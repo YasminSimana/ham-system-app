@@ -17,3 +17,13 @@
     display: flex;
     justify-content: space-between
 }
+
+.c-voting-view .charts , .c-voting-view .card-body {
+    text-align: left;
+}
+
+.c-voting-view .card-body button {
+    margin-bottom: 1em;
+    background-color: lightslategray;
+    border-color: lightslategray;
+}

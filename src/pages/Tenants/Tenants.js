@@ -6,6 +6,7 @@ import './Tenants.css';
 import UserModel from '../../models/UserModel';
 import NewTenantModal from '../../components/NewTenantModat/NewTenantModal';
 import TenantsView from '../../components/TenantsView/TenantsView';
+import { Redirect } from 'react-router';
 
 function Tenants(props) {
     const {activeUser, onLogOut} = props;
@@ -32,6 +33,10 @@ function Tenants(props) {
             fetchUsersData();
         }
     }, [activeUser])
+
+    if(!activeUser) {
+        return <Redirect to="/" />
+    }
 
     async function addTenant(fname, lname, email, building, apartment, img) {
         const user = Parse.Object.extend('User');

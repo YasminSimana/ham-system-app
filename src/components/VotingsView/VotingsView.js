@@ -7,7 +7,7 @@ import { Pie } from "react-chartjs-2";
 import PieChart from '../PieChart/PieChart';
 
 function VotingsView(props) {
-    const {isActive, votings, activeUser, updateVotingFromModal} = props;
+    const {isActive, votings, activeUser, updateVotingFromModal, users} = props;
     const [selectedVoting, setSelectedVoting] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [endDate, setEndDate] = useState(null);
@@ -33,16 +33,19 @@ function VotingsView(props) {
     async function handleUpdateEndDate() {
         console.log("update!", endDate)
         setShowModal(false);
+        updateVotingFromModal(endDate, votings[selectedVoting]);
 
-        const Voting = Parse.Object.extend('Voting');
-        const query = new Parse.Query(Voting);
-        // here you put the objectId that you want to update
-        const object = await query.get(votings[selectedVoting].id);
+        // const Voting = Parse.Object.extend('Voting');
+        // const query = new Parse.Query(Voting);
+        // // here you put the objectId that you want to update
+        // const object = await query.get(votings[selectedVoting].id);
         
-        object.set('endDate', new Date(endDate));
+        // object.set('endDate', new Date(endDate));
        
-        const response = await object.save();
-        console.log('Updated Voting', response);
+        // const response = await object.save();
+        // console.log('Updated Voting', response);
+        // const tmpArr = votings.filter(item => item.id !== id);
+        // setMessages(tmpArr.concat(new MessageModel(response)));
         // }, (error) => {
         //     if (typeof document !== 'undefined') document.write(`Error while updating Voting: ${JSON.stringify(error)}`);
         //     console.error('Error while updating Voting', error);
@@ -50,9 +53,8 @@ function VotingsView(props) {
     }
     
     
-    const votingsView = votings.map((voting, index) => {
-        
-        return <Card key={index}>
+    const votingsView = votings.map((voting, index) => (selectedVoting >= votings.lenght) ? null :     
+        <Card key={index}>
             <Accordion.Toggle as={Card.Header} eventKey={'' + index} onClick={e=>setSelectedVoting(index)}>
             <div className="header-acc">
                 <div>
@@ -75,7 +77,7 @@ function VotingsView(props) {
                             Your vote:
                         </p>
                         options
-                        {selectedVoting !== null ? votings[selectedVoting].options.map(item=>{console.log("item",item); return parseInt(item)}) : null}
+                        {(selectedVoting !== null && selectedVoting < votings.lenght) ? votings[selectedVoting].options.map(item=>{console.log("item",item); return parseInt(item)}) : null}
                         <DropdownButton id="dropdown-variants-Info" variant="info" title="Your Vote" value={userVote} onClick={(e) => {console.log("e",selectedVoting, e.target.value); return(setUserVote(e.target.value))}}>
                         {/* <Dropdown.Item value="1">1</Dropdown.Item>
                         <Dropdown.Item value="2">2</Dropdown.Item> */}
@@ -85,10 +87,19 @@ function VotingsView(props) {
                         
                             {isActive ?
                             <div>
-                            Voting Precentage
-                            <PieChart voting={votings[selectedVoting]} isResData={false} activeUser={activeUser}/>
-                            Voting Results
-                            <PieChart voting={votings[selectedVoting]} isResData={true} activeUser={activeUser}/> </div>: null}
+                                Voting Precentage
+                                <PieChart voting={votings[selectedVoting]} users={users} isResData={false} activeUser={activeUser}/> 
+                            </div> : 
+                            <div className="charts"> 
+                                <div>
+                                    Voting Precentage
+                                    <PieChart voting={votings[selectedVoting]} users={users} isResData={false} activeUser={activeUser}/>
+                                </div>
+                                <div>
+                                    Voting Results
+                                    <PieChart voting={votings[selectedVoting]} users={users} isResData={true} activeUser={activeUser}/> 
+                                </div>
+                            </div>}
                         
                     </div>
                     <div className="end-date-section">
@@ -105,7 +116,7 @@ function VotingsView(props) {
             </Card.Body>
             </Accordion.Collapse>
 
-            {selectedVoting !== null ? <Modal show={showModal} onHide={handleClose}>
+            {(selectedVoting !== null) ? <Modal show={showModal} onHide={handleClose}>
                 <Modal.Header closeButton>
                 <Modal.Title>Change the end date</Modal.Title>
                 </Modal.Header>
@@ -134,7 +145,7 @@ function VotingsView(props) {
                 </Modal.Footer>
             </Modal> : null}
         </Card>
-    });
+    );
 
     return (
         <div className="c-voting-view">
