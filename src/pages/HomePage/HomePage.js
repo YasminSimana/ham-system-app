@@ -12,7 +12,7 @@ export function HomePage(props) {
       <div>
 
         <Container>
-          <Row className="justify-content-md-center">
+          <Row className="justify-content-lg-center">
             <h1>Homeowner Association Management System</h1>
           </Row>
           <Row>

@@ -11,7 +11,7 @@ import VotingsView from '../../components/VotingsView/VotingsView';
 import { EmojiSmileFill } from 'react-bootstrap-icons';
 
 function Dashboards(props) {
-    const {activeUser, onLogOut} = props;
+    const {activeUser, onLogOut, users} = props;
     const [messagesArr, setMessagesArr] = useState([]);
     const [activeVotingsArr, setActiveVotingsArr] = useState([]);
     const [finishedVotingsArr, setFinishedVotingsArr] = useState([]);
@@ -75,7 +75,7 @@ function Dashboards(props) {
                     <Col>
                         <p>Pending Votings {activeVotingsArr.length}</p>
                         {activeVotingsArr.length > 0 ?
-                            <VotingsView isActive={true} votings={activeVotingsArr} activeUser={activeUser} updateVotingFromModal={null}/> :
+                            <VotingsView isActive={true} votings={activeVotingsArr} activeUser={activeUser} updateVotingFromModal={null} users={users}/> :
                             <p>There are no pending votings <EmojiSmileFill></EmojiSmileFill></p>}
                     </Col>
                 </Row>
@@ -83,7 +83,7 @@ function Dashboards(props) {
                     <Col>
                     <p>Voting Results</p>
                     {finishedVotingsArr.length > 0 ? 
-                        <VotingsView isActive={false} votings={finishedVotingsArr} activeUser={activeUser} updateVotingFromModal={null}/> : 
+                        <VotingsView isActive={false} votings={finishedVotingsArr} activeUser={activeUser} updateVotingFromModal={null} users={users}/> : 
                         <p>There are no votings results <EmojiSmileFill></EmojiSmileFill></p>}
                     </Col>
                     <Col>

@@ -9,7 +9,7 @@ import { AppNavbar } from '../../components/Navbar/Navbar';
 import './Votings.css';
 
 function Votings(props) {
-    const {activeUser, votings, addVoting, updateVoting, onLogOut, users} = props;
+    const {activeUser, votings, addVoting, updateVoting, updateSelectedVote, onLogOut, users} = props;
     const [activeVotingsArr, setActiveVotingsArr] = useState([]);
     const [finishedVotingsArr, setFinishedVotingsArr] = useState([]);
     const [searchByStr, setSearchByStr] = useState("");
@@ -31,8 +31,10 @@ function Votings(props) {
 
     //converting data into presentation
     const filteredFinishedVotings = finishedVotingsArr.filter(voting => (voting.title.includes(searchByStr) || voting.details.includes(searchByStr)));
-    const filteredActiveVotings = activeVotingsArr;
-
+    const filteredActiveVotings = activeUser.isCommitteeMember ? activeVotingsArr : activeVotingsArr.filter(voting => voting.results.map(res => res["user"]).indexOf(activeUser.id) === -1);
+    // debugger;
+    // activeVotingsArr[0].results.map(res=>res["user"]).indexOf(activeUser.id)
+    // const filteredActiveVotings = activeVotingsArr;
 
     return (
         <div className="p-votings">
@@ -50,7 +52,7 @@ function Votings(props) {
                             </Col>
                         </Row>
                         <Row className="accor-size" sm={12}>
-                            <VotingsView isActive={true} votings={filteredActiveVotings} activeUser={activeUser} updateVotingFromModal={updateVoting}/>
+                            <VotingsView isActive={true} votings={filteredActiveVotings} activeUser={activeUser} updateVotingFromModal={updateVoting} updateSelectedVote={updateSelectedVote} users={users}/>
                         </Row>
                     </Col>
                     
@@ -68,7 +70,7 @@ function Votings(props) {
                             </Col>
                         </Row>
                         <Row className="accor-size" sm={12}>
-                            <VotingsView isActive={false} votings={filteredFinishedVotings} activeUser={activeUser} updateVotingFromModal={updateVoting} users={users}/>
+                            <VotingsView isActive={false} votings={filteredFinishedVotings} activeUser={activeUser} updateVotingFromModal={updateVoting} updateSelectedVote={updateSelectedVote} users={users}/>
                         </Row>
                     </Col>
                 </Container>

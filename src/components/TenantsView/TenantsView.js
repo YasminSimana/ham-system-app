@@ -37,24 +37,24 @@ function TenantsView(props) {
     // }, [selectedMsg])
 
 
-    async function updateTenant(readBy){
-        // const message = Parse.Object.extend('message');
-        // const query = new Parse.Query(message);
-        // try {
-        //     const object = await query.get(messages[selectedMsg].id);
-        //     object.set('readBy', readBy);
-        //     try{
-        //         const response = await object.save();
-        //         console.log('Updated message', response);
-        //     }
-        //     catch (error1) {
-        //         console.error('Error while updating message', error1);
-        //     }
-        // }
-        // catch (error2) {
-        //     console.log('Error while updating message', error2)
-        // }
-    }
+    // async function updateTenant(readBy){
+    //     // const message = Parse.Object.extend('message');
+    //     // const query = new Parse.Query(message);
+    //     // try {
+    //     //     const object = await query.get(messages[selectedMsg].id);
+    //     //     object.set('readBy', readBy);
+    //     //     try{
+    //     //         const response = await object.save();
+    //     //         console.log('Updated message', response);
+    //     //     }
+    //     //     catch (error1) {
+    //     //         console.error('Error while updating message', error1);
+    //     //     }
+    //     // }
+    //     // catch (error2) {
+    //     //     console.log('Error while updating message', error2)
+    //     // }
+    // }
 
     // function msgOnClick(eventKey) {
     //     setLoading(true);
@@ -136,7 +136,7 @@ function TenantsView(props) {
                     <div>
                         <div className="edit-btm">
                             <Button onClick={() => setShowModal(true)}>Update</Button>
-                            <Button onClick={ e=> deleteTenant(tenant.id, index)}>Delete</Button>
+                            <Button onClick={ e=> deleteTenant(tenant.id)}>Delete</Button>
                         </div>
                     </div>
                 </div>

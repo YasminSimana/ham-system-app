@@ -2,13 +2,19 @@ import React, { useEffect } from 'react';
 import { Pie } from "react-chartjs-2";
 
 function PieChart(props) {
-    const {voting, users, isResData, activeUser} = props;
-    console.log("chart", voting)
+    const {voting, users, isResData} = props;
+    console.log("chart", voting, users)
 
     let dataArr = [];
     let usersArr = [];
 
-    if (users) {usersArr = users.filter(user => user.isCommitteeMember === false)}
+    useEffect(()=> {
+        if (users) {
+            usersArr = users.filter(user => user.isCommitteeMember === false)
+        }
+    }, [users])
+
+    // if (users) {usersArr = users.filter(user => user.isCommitteeMember === false)}
 
     if (voting && isResData) {
         for (let i = 0; i < voting.options.length; i++){
@@ -16,12 +22,14 @@ function PieChart(props) {
         }
 
         for (const res of voting.results) {
+            console.log("voting.options.indexOf(res",voting.options.indexOf(res["vote"]))
+            console.log("dataArr[voting.options", dataArr[voting.options.indexOf(res["vote"])])
             dataArr[voting.options.indexOf(res["vote"])] ++;
         }
         console.log("data", dataArr);
     }
 
-    if (usersArr && voting && !isResData) {
+    if (usersArr.length > 0 && voting && !isResData) {
         console.log("length", users, usersArr, usersArr.length, voting.results.length)
         dataArr[0] = voting.results.length;
         dataArr[1] = usersArr.length-voting.results.length;

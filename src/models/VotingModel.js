@@ -1,3 +1,5 @@
+import { Dropdown } from "react-bootstrap";
+
 class VotingModel {
     constructor(parseVoting){
         this.id = parseVoting.id;
@@ -20,6 +22,16 @@ class VotingModel {
         }
         console.log("max",dataArr)
         return this.options[dataArr.indexOf(Math.max(...dataArr))];
+    }
+
+    getOptionsItems() {
+        let optionsArr = [];
+        for(let i of this.options){
+            optionsArr.push(<Dropdown.Item value={i}>{i}</Dropdown.Item>)
+        }
+        console.log("options", this.options)
+        console.log("optionsArr", optionsArr)
+        return optionsArr;
     }
 }
 

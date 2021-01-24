@@ -1,9 +1,8 @@
 import './App.css';
-import { HashRouter, Redirect, Route, Switch } from 'react-router-dom';
+import { HashRouter, Route, Switch } from 'react-router-dom';
 import { LogIn } from './pages/LogIn/LogIn';
 import { SignUp } from './pages/SignUp/SignUp';
 import { HomePage } from './pages/HomePage/HomePage';
-import Issues from './pages/Issues/Issues';
 import { useEffect, useState } from 'react';
 import Parse from 'parse';
 import UserModel from './models/UserModel';
@@ -33,17 +32,28 @@ function App() {
       try {
         const parseUsers = await query.find();
         setUsers(parseUsers.map(item => new UserModel(item)));
-        console.log("Success! users arr", users);
+        console.log("Success! users arr", parseUsers.map(item => new UserModel(item)));
       } catch (error) {
         console.log("Error! users arr", error);
       }
     }
 
+    // async function fetchUsersData() {
+    //   const parseUser = Parse.Object.extend('User');
+    //   const query = new Parse.Query(parseUser);
+    //   const community = new Parse.Object.extend('Community');
+    //   community.id = activeUser.community;
+    //   console.log("active user", activeUser)
+    //   query.equalTo("community", activeUser.community);
+    //   query.equalTo("isCommitteeMember", false);
+    //   query.equalTo("deleted", false);
+    //   const parseUsers = await query.find();
+    //   setTenantsArr(parseUsers.map(item => new UserModel(item)));
+    //   console.log("tenants arr", parseUsers);
+
     async function fetchMessagesData() {
         const parseMessage = Parse.Object.extend('message');
         const query = new Parse.Query(parseMessage);
-        // const community = new Parse.Object.extend('Community');
-        // community.id = activeUser.community;
         console.log("active user", activeUser)
         query.equalTo("community", activeUser.community);
         try {const parseMessages = await query.find();
@@ -61,12 +71,10 @@ function App() {
       try {
         const parseVotings = await query.find();
         setVotings(parseVotings.map(item => new VotingModel(item)));
-        console.log("Success! users arr", votings);
+        console.log("Success! votings arr", votings);
       } catch (error){
         console.log("Error! votings arr", error);
       }
-      // setActiveVotingsArr(parseVotings.filter(item => item.get("endDate") >= new Date()).map(filteredItem => new VotingModel(filteredItem)));
-      // setFinishedVotingsArr(parseVotings.filter(item => item.get("endDate") < new Date()).map(filteredItem => new VotingModel(filteredItem)));
       
   }
 
@@ -95,11 +103,8 @@ function App() {
   }
 
   async function addMessage(title, details, priority, img) {
-    // const community = Parse.Object.extend('Community');
-    // const query = new Parse.Query(community);
     const message = Parse.Object.extend('message');
     const newMessage = new message();
-    // const communityObject = await query.get(activeUser.community.id);
     
     newMessage.set('title', title);
     newMessage.set('details', details);
@@ -123,7 +128,6 @@ async function updateMessage(id, title, details, priority, img) {
     const object = await query.get(id);
     object.set('title', title);
     object.set('details', details);
-    // object.set('priority', parseInt(priority));
     object.set('priorityName', priority);
     object.set('img',  new Parse.File(img.name, img));
     try {const response = await object.save();
@@ -171,7 +175,6 @@ async function addVoting(title, details, endDate, options) {
 }
 
 async function updateVoting(endDate, voting) {
-  console.log("hellooo")
   const Voting = Parse.Object.extend('Voting');
   const query = new Parse.Query(Voting);
   const object = await query.get(voting.id);
@@ -180,35 +183,108 @@ async function updateVoting(endDate, voting) {
  
   try {
       const response = await object.save();
-      console.log('Updated Voting', response);
+      console.log('Success! updated voting end date', response);
       const tmpArr = votings.filter(item => item.id !== voting.id);
       setVotings(tmpArr.concat(new VotingModel(response))); 
   } catch (error) {
       console.log("Error! update voting end date", error);
   }
-  // const message = Parse.Object.extend('message');
-  // const query = new Parse.Query(message);
-  // const object = await query.get(id);
-  // object.set('title', title);
-  // object.set('details', details);
-  // object.set('priority', parseInt(priority));
-  // object.set('img',  new Parse.File(img.name, img));
-  // const response = await object.save();
-  // console.log('Updated message', response);
-  // const tmpArr = messagesArr.filter(item => item.id !== id);
-  // setMessagesArr(tmpArr.concat(new MessageModel(response))); 
 }
+
+async function updateSelectedVote(vote, voting) {
+  const Voting = Parse.Object.extend('Voting');
+  const query = new Parse.Query(Voting);
+  const object = await query.get(voting.id);
+  let results = voting.results.concat({"user": activeUser.id, "vote": vote});
+  console.log("voting.results", voting.results)
+  console.log("results", results)
+  object.set('results', results);
+ 
+  try {
+      const response = await object.save();
+      console.log('Success! updated voting results', response);
+      const tmpArr = votings.filter(item => item.id !== voting.id);
+      setVotings(tmpArr.concat(new VotingModel(response))); 
+  } catch (error) {
+      console.log("Error! update voting results", error);
+  }
+}
+
+async function addTenant(fname, lname, email, building, apartment, img) {
+  const user = Parse.Object.extend('User');
+  const newUser = new user();
+  let acl = new Parse.ACL();
+  acl.setPublicWriteAccess( true );
+  acl.setPublicReadAccess( true);
+  newUser.setACL( acl );
+  newUser.set('fname', fname);
+  newUser.set('lname', lname);
+  newUser.set('username', fname + lname);
+  newUser.set('email', email);
+  newUser.set('fetchEmail', email);
+  newUser.set('password', "123");
+  newUser.set('building', building);
+  newUser.set('apartment', apartment);
+  newUser.set('img', new Parse.File(img.name, img));
+  newUser.set('community', activeUser.parseUser.get("community"));
+  newUser.set('isCommitteeMember', false);
+  try {
+      const parseUser = await newUser.save();
+      setUsers(users.concat(new UserModel(parseUser)));
+      console.log('Success! adding user(tenant)', parseUser);
+    } catch (error){
+      console.log("Error! adding user(tenant)", error);
+  }
+}
+
+async function updateTenantInfo(id, fname, lname, email, building, apartment, img) {
+  const User = new Parse.User();
+  const query = new Parse.Query(User);
+  const user = await query.get(id);
+  user.set('fname', fname);
+  user.set('lname', lname);
+  user.set('email', email);
+  user.set('fetchEmail', email);
+  user.set('building', building);
+  user.set('apartment', apartment);
+  user.set('img',  new Parse.File(img.name, img));
+  try {
+      const response = await user.save();
+      console.log('Success! updating user(tenant)', response);
+      const tmpArr = users.filter(item => item.id !== id);
+      setUsers(tmpArr.concat(new UserModel(response)));
+  } catch(error) {
+      console.error('Error! updating user(tenant)', error);
+  }
+}
+
+async function deleteTenant(id) {
+  debugger;
+  const User = new Parse.User();
+  const query = new Parse.Query(User);
+
+  const user = await query.get(id);
+  user.set('deleted', true);
+  try {
+      const response = await user.save();
+      console.log('Success! delete user(tenant)', response);
+      const tmpArr = users.filter(item => item.id !== id);
+      setUsers(tmpArr);
+  } catch(error) {
+      console.error('Error! delete user(tenant)', error);
+  }
+}
+
 
   return (
     <div className="App">
       <HashRouter>
         <Switch>
           <Route exact path="/"><HomePage activeUser={activeUser} onLogOut={handleLogout}/></Route>
-          <Route exact path="/dashboards"><Dashboards activeUser={activeUser} onLogOut={handleLogout}/></Route>
-          <Route exact path="/tenants"><Tenants activeUser={activeUser} onLogOut={handleLogout}/></Route>
+          <Route exact path="/dashboards"><Dashboards activeUser={activeUser} onLogOut={handleLogout} users={users}/></Route>
+          <Route exact path="/tenants"><Tenants activeUser={activeUser} users={users} addTenant={addTenant} updateTenantInfo={updateTenantInfo} deleteTenan={deleteTenant} onLogOut={handleLogout}/></Route>
           <Route exact path="/messages"><Messages activeUser={activeUser} users={users} messages={messages} addMessage={addMessage} updateMessage={updateMessage} deleteMessage={deleteMessage} onLogOut={handleLogout}/></Route>
-          <Route exact path="/votings"><Votings activeUser={activeUser} votings={votings} addVoting={addVoting} updateVoting={updateVoting} onLogOut={handleLogout} users={users}/></Route>
-          <Route exact path="/issues"><Issues activeUser={activeUser} onLogOut={handleLogout}/></Route>
+          <Route exact path="/votings"><Votings activeUser={activeUser} votings={votings} addVoting={addVoting} updateVoting={updateVoting} updateSelectedVote={updateSelectedVote} onLogOut={handleLogout} users={users}/></Route>
           <Route exact path="/login"><LogIn onLogIn={handleLogin}/></Route>
           <Route exact path="/signup"><SignUp onSignUp={handleSignup}/></Route>
         </Switch>

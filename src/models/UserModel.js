@@ -9,6 +9,7 @@ class UserModel {
         this.isCommitteeMember = parseUser.get("isCommitteeMember");
         this.img = parseUser.get("img") ? parseUser.get("img").url() : null;
         this.community = parseUser.get("community");
+        this.deleted = parseUser.get("deleted");
         this.parseUser = parseUser;
     }
 

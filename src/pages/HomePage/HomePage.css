@@ -17,19 +17,14 @@
 }
 
 .p-hp .row {
-    align-content: center;
+    display: flex;
+    justify-content: center;
 }
 
 .p-hp .img-set {
     width: 400px;
     border-radius: 22%;
     opacity: 0.75;
-}
-
-
-.p-hp .carousel {
-    position: absolute;
-    left: 20%;
 }
 
 .p-hp .carousel-item {

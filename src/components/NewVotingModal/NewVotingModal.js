@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { Button, Col, Form, FormControl, Image, InputGroup, Modal, Row } from 'react-bootstrap';
-import { PlusCircleFill } from 'react-bootstrap-icons';
+import { Button, Col, Form, FormControl, FormGroup, Image, InputGroup, Modal, Row } from 'react-bootstrap';
+import { FileMinusFill, PlusCircleFill } from 'react-bootstrap-icons';
 import InputGroupWithExtras from 'react-bootstrap/esm/InputGroup';
 
 function NewVotingModal(props) {
@@ -24,6 +24,9 @@ function NewVotingModal(props) {
       closeModal();
     }
   
+    function handleRemoveOption(e, option) {
+        console.log("eee",option, e.target.value)
+    }
     return (
       <Modal show={show} onHide={closeModal} size="xl" className="c-new-voting-modal">
           <Modal.Header closeButton>
@@ -34,40 +37,61 @@ function NewVotingModal(props) {
                 
                   <Form.Group as={Row} controlId="formHorizontalName">
                       <Form.Label column sm={2}>
-                          Voting Title
+                          Title
                       </Form.Label>
                       <Col sm={10}>
-                          <Form.Control type="text" placeholder="Voting Title" value={title} onChange={e => setTitle(e.target.value)} />
+                          <Form.Control type="text" placeholder="Voting Title" required value={title} onChange={e => setTitle(e.target.value)} />
                       </Col>
                   </Form.Group>
 
                   <Form.Group as={Row} controlId="formHorizontalDesc">
                       <Form.Label column sm={2}>
-                        Voting Details
+                        Details
                       </Form.Label>
                       <Col sm={10}>
-                          <Form.Control type="text" placeholder="Voting Details" value={details} onChange={e => setDetails(e.target.value)}  />
+                          <Form.Control type="text" placeholder="Voting Details" required value={details} onChange={e => setDetails(e.target.value)}  />
                       </Col>
                   </Form.Group>
 
                   <Form.Group as={Row} controlId="formHorizontalDesc">
                       <Form.Label column sm={2}>
-                        Voting End Date
+                        End Date
                       </Form.Label>
                       <Col sm={10}>
-                          <Form.Control type="date" placeholder="Voting End Date" value={endDate} onChange={e => setEndDate(e.target.value)}  />
+                          <Form.Control type="date" placeholder="Voting End Date" required value={endDate} onChange={e => setEndDate(e.target.value)}  />
                       </Col>
                   </Form.Group>
 
+                  <Form.Label column sm={2}>
+                             Options
+                         </Form.Label>
                   {options.map((option,index) => 
-                    <Form.Group key={index} as={Row} controlId="formHorizontalImage">
-                        <Form.Label column sm={2}>
-                            Voting Option
-                        </Form.Label>
-                        <Col sm={10}>
-                            <Form.Control type="number" placeholder={option}/>
-                        </Col>
-                    </Form.Group>)}
+                    <InputGroup key={index} as={Row} controlId="inputHorizontalOption">
+                        
+                         {/* <Col> */}
+                                <FormControl
+                                type="text" placeholder={option} required
+                                />
+                                <InputGroup.Append>
+                                <Button variant="outline-secondary" onClick={(e)=>handleRemoveOption(e, option)}>
+                                    <FileMinusFill></FileMinusFill>
+                                </Button>
+                                </InputGroup.Append>
+                        {/* </Col> */}
+                    </InputGroup>
+
+                    // <Form.Group key={index} as={Row} controlId="formHorizontalImage">
+                    //     <Form.Label column sm={2}>
+                    //         Voting Option
+                    //     </Form.Label>
+                    //     <Col sm={10}>
+                    //         <Form.Control type="text" placeholder={option} required/>
+                    //         <FormGroup.Append>
+                    //             <Button variant="outline-secondary">Button</Button>
+                    //         </FormGroup.Append>
+                    //     </Col>
+                    // </Form.Group>
+                    )}
                     <InputGroup className="sm-3">
                         <InputGroup.Prepend>
                         <Button variant="outline-secondary" onClick={()=>setOptions(options.concat(newOption))}>
