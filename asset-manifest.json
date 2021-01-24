@@ -1,24 +1,24 @@
 {
   "files": {
-    "main.css": "/YasminSimana/ham-system-app/static/css/main.30bde43f.chunk.css",
-    "main.js": "/YasminSimana/ham-system-app/static/js/main.d1b62084.chunk.js",
-    "main.js.map": "/YasminSimana/ham-system-app/static/js/main.d1b62084.chunk.js.map",
-    "runtime-main.js": "/YasminSimana/ham-system-app/static/js/runtime-main.8c4108f6.js",
-    "runtime-main.js.map": "/YasminSimana/ham-system-app/static/js/runtime-main.8c4108f6.js.map",
-    "static/css/2.ae9f1eb3.chunk.css": "/YasminSimana/ham-system-app/static/css/2.ae9f1eb3.chunk.css",
-    "static/js/2.35a93888.chunk.js": "/YasminSimana/ham-system-app/static/js/2.35a93888.chunk.js",
-    "static/js/2.35a93888.chunk.js.map": "/YasminSimana/ham-system-app/static/js/2.35a93888.chunk.js.map",
-    "static/js/3.5431a24f.chunk.js": "/YasminSimana/ham-system-app/static/js/3.5431a24f.chunk.js",
-    "static/js/3.5431a24f.chunk.js.map": "/YasminSimana/ham-system-app/static/js/3.5431a24f.chunk.js.map",
-    "index.html": "/YasminSimana/ham-system-app/index.html",
-    "static/css/2.ae9f1eb3.chunk.css.map": "/YasminSimana/ham-system-app/static/css/2.ae9f1eb3.chunk.css.map",
-    "static/css/main.30bde43f.chunk.css.map": "/YasminSimana/ham-system-app/static/css/main.30bde43f.chunk.css.map",
-    "static/js/2.35a93888.chunk.js.LICENSE.txt": "/YasminSimana/ham-system-app/static/js/2.35a93888.chunk.js.LICENSE.txt"
+    "main.css": "/ham-system-app/static/css/main.30bde43f.chunk.css",
+    "main.js": "/ham-system-app/static/js/main.d1b62084.chunk.js",
+    "main.js.map": "/ham-system-app/static/js/main.d1b62084.chunk.js.map",
+    "runtime-main.js": "/ham-system-app/static/js/runtime-main.f7bfd7ef.js",
+    "runtime-main.js.map": "/ham-system-app/static/js/runtime-main.f7bfd7ef.js.map",
+    "static/css/2.ae9f1eb3.chunk.css": "/ham-system-app/static/css/2.ae9f1eb3.chunk.css",
+    "static/js/2.96545425.chunk.js": "/ham-system-app/static/js/2.96545425.chunk.js",
+    "static/js/2.96545425.chunk.js.map": "/ham-system-app/static/js/2.96545425.chunk.js.map",
+    "static/js/3.5431a24f.chunk.js": "/ham-system-app/static/js/3.5431a24f.chunk.js",
+    "static/js/3.5431a24f.chunk.js.map": "/ham-system-app/static/js/3.5431a24f.chunk.js.map",
+    "index.html": "/ham-system-app/index.html",
+    "static/css/2.ae9f1eb3.chunk.css.map": "/ham-system-app/static/css/2.ae9f1eb3.chunk.css.map",
+    "static/css/main.30bde43f.chunk.css.map": "/ham-system-app/static/css/main.30bde43f.chunk.css.map",
+    "static/js/2.96545425.chunk.js.LICENSE.txt": "/ham-system-app/static/js/2.96545425.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.8c4108f6.js",
+    "static/js/runtime-main.f7bfd7ef.js",
     "static/css/2.ae9f1eb3.chunk.css",
-    "static/js/2.35a93888.chunk.js",
+    "static/js/2.96545425.chunk.js",
     "static/css/main.30bde43f.chunk.css",
     "static/js/main.d1b62084.chunk.js"
   ]
