@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { AppNavbar } from '../../components/Navbar/Navbar';
 import { Button, Col, Container, Dropdown, DropdownButton, Form, Row } from 'react-bootstrap';
 import './Messages.css';
 import MessagesView from '../../components/MessagesView/MessagesView';
@@ -29,7 +28,6 @@ function Messages(props) {
         
     return (
         <div className="p-messages">
-            <AppNavbar activeUser={activeUser} onLogOut={onLogOut}/>
             <div className="filters">
                 <Container>
                     <Row>
@@ -57,9 +55,10 @@ function Messages(props) {
                         </Col>
                     </Row>
                     <Row>
+                        {activeUser.isCommitteeMember ?
                         <Col className="new-msg-btn">
                             <Button variant="link" onClick={() => setShowModal(true)}>New Message</Button>
-                        </Col>
+                        </Col> : null}
                     </Row>
                 </Container>
                 

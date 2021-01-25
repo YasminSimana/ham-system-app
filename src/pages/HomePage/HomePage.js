@@ -8,7 +8,7 @@ export function HomePage(props) {
   const {activeUser, onLogOut} = props;
   return (
     <div className="p-hp">
-      <AppNavbar activeUser={activeUser} onLogOut={onLogOut}/>
+      {/* <AppNavbar activeUser={activeUser} onLogOut={onLogOut}/> */}
       <div>
 
         <Container>

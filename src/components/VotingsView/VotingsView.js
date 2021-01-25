@@ -17,15 +17,12 @@ function VotingsView(props) {
         setShowModal(false);
       }
   
-    async function handleUpdateEndDate(index) {
-        console.log("update!", endDate)
-        console.log("index", index)
+    function handleUpdateEndDate(endDate, voting) {
         setShowModal(false);
-        // updateVotingFromModal(endDate, votings[selectedVoting]);
+        updateVotingFromModal(endDate, voting);
     }
     
     function handleSelectedVote(item,voting) {
-        console.log("item", item, voting);
         updateSelectedVote(item, voting)
     }
     
@@ -52,18 +49,16 @@ function VotingsView(props) {
                         <p>
                             Your vote:
                         </p>
-                        options
                         <DropdownButton id="dropdown-variants-Info" variant="info" title="Your Vote" value={userVote}>
                             {voting.options.map(item=><Dropdown.Item value={item} onClick={()=>handleSelectedVote(item, voting)}>{item}</Dropdown.Item>)}
                         </DropdownButton>
-                        <Button variant="light">Submit</Button>
                         
-                            {isActive ?
+                            {isActive && activeUser.isCommitteeMember ?
                             <div>
                                 Voting Precentage
-                                {console.log("***users", users)}
                                 <PieChart voting={voting} users={users} isResData={false} activeUser={activeUser}/> 
-                            </div> : 
+                            </div> : null}
+                            {!isActive && activeUser.isCommitteeMember ?
                             <div className="charts"> 
                                 <div>
                                     Voting Precentage
@@ -73,7 +68,14 @@ function VotingsView(props) {
                                     Voting Results
                                     <PieChart voting={voting} users={users} isResData={true} activeUser={activeUser}/> 
                                 </div>
-                            </div>}
+                            </div> : null}
+                            {!isActive && !activeUser.isCommitteeMember ?
+                            <div className="charts"> 
+                                <div>
+                                    Voting Results
+                                    <PieChart voting={voting} users={users} isResData={true} activeUser={activeUser}/> 
+                                </div>
+                            </div> : null}
                         
                     </div>
                     <div className="end-date-section">

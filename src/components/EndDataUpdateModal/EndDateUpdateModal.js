@@ -14,10 +14,9 @@ function EndDateUpdateModal(props) {
       handleClose();
     }
 
-    function handleUpdateVoting() {
+    function handleUpdateEndDate() {
         const newEndDate = endDate ? endDate : currentEndDate;
-        console.log("update", newEndDate);
-        // updateVoting(id, newEndDate);
+        updateVoting(newEndDate, voting);
         closeModal();
     }
   
@@ -27,7 +26,6 @@ function EndDateUpdateModal(props) {
         <Modal.Title>Change the end date</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-            {console.log("index voting", voting)}
             Current End Date:
             {voting ? voting.endDate.toLocaleDateString() : null}
             <Form>
@@ -45,9 +43,9 @@ function EndDateUpdateModal(props) {
         <Button variant="secondary" onClick={closeModal}>
             Close
         </Button>
-        {/* <Button variant="primary" onClick={handleUpdateEndDate(index)}>
+        <Button variant="primary" onClick={handleUpdateEndDate}>
             Save Changes
-        </Button> */}
+        </Button>
         </Modal.Footer>
     </Modal>
   );

@@ -38,8 +38,8 @@ function Votings(props) {
 
     return (
         <div className="p-votings">
-            <div>
-            <AppNavbar activeUser={activeUser} onLogOut={onLogOut}/>
+            {/* <div>
+            <AppNavbar activeUser={activeUser} onLogOut={onLogOut}/> */}
             <div>
                 <Container className="votings-cols">
                     <Col>
@@ -47,12 +47,13 @@ function Votings(props) {
                             <h3>Active Votings</h3>
                         </Row>
                         <Row>
+                        {activeUser.isCommitteeMember ?
                             <Col className="new-voting-btn">
                                 <Button variant="link" onClick={() => setShowModal(true)}>New Voting</Button>
-                            </Col>
+                            </Col> : null}
                         </Row>
                         <Row className="accor-size" sm={12}>
-                            <VotingsView isActive={true} votings={filteredActiveVotings} activeUser={activeUser} updateVotingFromModal={updateVoting} updateSelectedVote={updateSelectedVote} users={users}/>
+                            <VotingsView isActive={true} votings={filteredActiveVotings} activeUser={activeUser} updateVoting={updateVoting} updateSelectedVote={updateSelectedVote} users={users}/>
                         </Row>
                     </Col>
                     
@@ -82,7 +83,7 @@ function Votings(props) {
             </Container>
             <NewVotingModal show={showModal} handleClose={() => setShowModal(false)} addVoting={addVoting}/>
         </div>
-        </div>
+        // </div>
     );
 }
 

@@ -12,6 +12,8 @@ import Tenants from './pages/Tenants/Tenants';
 import Dashboards from './pages/Dashboards/Dashboards';
 import MessageModel from './models/MessageModel';
 import VotingModel from './models/VotingModel';
+import { AppNavbar } from './components/Navbar/Navbar';
+
 
 function App() {
   const [activeUser, setActiveUser] = useState(
@@ -37,19 +39,6 @@ function App() {
         console.log("Error! users arr", error);
       }
     }
-
-    // async function fetchUsersData() {
-    //   const parseUser = Parse.Object.extend('User');
-    //   const query = new Parse.Query(parseUser);
-    //   const community = new Parse.Object.extend('Community');
-    //   community.id = activeUser.community;
-    //   console.log("active user", activeUser)
-    //   query.equalTo("community", activeUser.community);
-    //   query.equalTo("isCommitteeMember", false);
-    //   query.equalTo("deleted", false);
-    //   const parseUsers = await query.find();
-    //   setTenantsArr(parseUsers.map(item => new UserModel(item)));
-    //   console.log("tenants arr", parseUsers);
 
     async function fetchMessagesData() {
         const parseMessage = Parse.Object.extend('message');
@@ -259,7 +248,6 @@ async function updateTenantInfo(id, fname, lname, email, building, apartment, im
 }
 
 async function deleteTenant(id) {
-  debugger;
   const User = new Parse.User();
   const query = new Parse.Query(User);
 
@@ -279,10 +267,11 @@ async function deleteTenant(id) {
   return (
     <div className="App">
       <HashRouter>
+        <AppNavbar activeUser={activeUser} onLogOut={handleLogout}></AppNavbar>
         <Switch>
           <Route exact path="/"><HomePage activeUser={activeUser} onLogOut={handleLogout}/></Route>
-          <Route exact path="/dashboards"><Dashboards activeUser={activeUser} onLogOut={handleLogout} users={users}/></Route>
-          <Route exact path="/tenants"><Tenants activeUser={activeUser} users={users} addTenant={addTenant} updateTenantInfo={updateTenantInfo} deleteTenan={deleteTenant} onLogOut={handleLogout}/></Route>
+          <Route exact path="/dashboards"><Dashboards activeUser={activeUser} messages={messages} votings={votings} addVoting={addVoting} updateVoting={updateVoting} updateSelectedVote={updateSelectedVote} onLogOut={handleLogout} users={users}/></Route>
+          {activeUser && activeUser.isCommitteeMember ? <Route exact path="/tenants"><Tenants activeUser={activeUser} users={users} addTenant={addTenant} updateTenantInfo={updateTenantInfo} deleteTenant={deleteTenant} onLogOut={handleLogout}/></Route> : null}
           <Route exact path="/messages"><Messages activeUser={activeUser} users={users} messages={messages} addMessage={addMessage} updateMessage={updateMessage} deleteMessage={deleteMessage} onLogOut={handleLogout}/></Route>
           <Route exact path="/votings"><Votings activeUser={activeUser} votings={votings} addVoting={addVoting} updateVoting={updateVoting} updateSelectedVote={updateSelectedVote} onLogOut={handleLogout} users={users}/></Route>
           <Route exact path="/login"><LogIn onLogIn={handleLogin}/></Route>

@@ -1,4 +1,5 @@
 .p-dashboards {
+    padding-top: 10px;
     display: block;
     position: relative;
     height: 100%;
@@ -19,12 +20,6 @@
     z-index: -1; 
 
     height: 100%;
-}
-
-.p-dashboards .filters {
-    margin-top: 10px;
-    display: flex;
-    justify-content: space-evenly;
 }
 
 .p-dashboards .sort-by {

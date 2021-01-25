@@ -1,7 +1,7 @@
 .p-tenants {
-    /* display: block; */
+    display: block;
     position: relative;
-    /* height: 100%; */
+    height: 100%;
 }
 
 .p-tenants::after {
@@ -22,7 +22,7 @@
 }
 
 .p-tenants .filters {
-    margin-top: 10px;
+    padding-top: 10px;
     display: flex;
     justify-content: space-evenly;
 }

@@ -167,11 +167,11 @@ function MessagesView(props) {
                                 </InputGroup.Append>
                             </InputGroup>
                             </div>
-                            
+                            {activeUser.isCommitteeMember ?
                             <div className="msg-btm">
                                 <Button onClick={() => setShowModal(true)}>Update</Button>
                                 <Button onClick={ e=> deleteMessage(msg.id)}>Delete</Button>
-                            </div>
+                                </div> : null}
                         </div>
                     </div>
                 </div>
