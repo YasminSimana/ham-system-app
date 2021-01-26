@@ -3,7 +3,11 @@ import { Button, Col, Container, Dropdown, DropdownButton, Form, Row } from 'rea
 import './Messages.css';
 import MessagesView from '../../components/MessagesView/MessagesView';
 import NewMessageModal from '../../components/NewMessageModal/NewMessageModal';
+import { Redirect } from 'react-router';
 
+//Messages component is the page were user see all relevant messages, sort and filter them
+//Committee member can add a new message, update message details and delete message
+//All user can also add comments to each message
 function Messages(props) {
     const {activeUser, users, messages, addMessage, updateMessage, deleteMessage, onLogOut} = props;
     const [searchByStr, setSearchByStr] = useState("");
@@ -11,6 +15,10 @@ function Messages(props) {
     const [sortBy, setSortBy] = useState("createdAt");
     const [showModal, setShowModal] = useState(false);
 
+
+    if(!activeUser) {
+        return <Redirect to="/" />
+    }
 
     //convert data to presentation
   
@@ -31,7 +39,7 @@ function Messages(props) {
             <div className="filters">
                 <Container>
                     <Row>
-                        <Col lg={6} md={12} sm={12}>
+                        <Col lg={5} md={12} sm={12}>
                             <Form>
                                 <Form.Group controlId="formBasicSearch">
                                 <Form.Control value={searchByStr} type="text" placeholder="Filter by text in Title and Details" onChange={e => setSearchByStr(e.target.value)}/>
@@ -44,10 +52,10 @@ function Messages(props) {
                                 <Dropdown.Item eventKey="Important" href="#">Important</Dropdown.Item>
                             </DropdownButton>
                         </Col>
-                        <Col lg={3} md={6} sm={12}>
+                        <Col lg={4} md={6} sm={12}>
                             <Form>
                                 <Form.Group value={sortBy} as={Row} onChange={e => setSortBy(e.target.value)}>
-                                    <Form.Label column as="legend" sm={5}>Sort By:</Form.Label>
+                                    <Form.Label column as="legend">Sort By:</Form.Label>
                                     <Form.Check value="createdAt" type="radio" label="Date" name="formHorizontalRadios" id="formHorizontalRadios1" className="sort-by"/>
                                     <Form.Check value="priority" type="radio" label="Priority" name="formHorizontalRadios" id="formHorizontalRadios2" className="sort-by"/>
                                 </Form.Group>

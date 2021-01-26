@@ -28,5 +28,7 @@
 }
 
 .c-tenant-view .tenant-info {
+    margin-left: 2em;
+    margin-top: 1em;
     text-align: left;
 }

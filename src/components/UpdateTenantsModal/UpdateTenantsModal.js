@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Button, Col, Form, Image, Modal, Row } from 'react-bootstrap';
 
 function UpdateTenantsModal(props) {
-    const { show, handleClose, updateTenant, id, currentFname, currentLname, currentEmail, currentBuilding, currentApartment, currentImg} = props;
+    const { show, user, handleClose, updateTenant, id, currentFname, currentLname, currentEmail, currentBuilding, currentApartment, currentImg} = props;
     const [fname, setFname] = useState("");
     const [lname, setLname] = useState("");
     const [email, setEmail] = useState("");
@@ -28,15 +28,14 @@ function UpdateTenantsModal(props) {
       }
     }
 
-    function handleUpdateMessage() {
+    function handleUpdate() {
         const newFname = fname ? fname : currentFname;
         const newLname = lname ? lname : currentLname;
         const newEmail = email ? email : currentEmail;
         const newBuilding = building ? building : currentBuilding;
         const newApartment = apartment ? apartment : currentApartment;
         const newImg = img ? img : currentImg;
-        console.log("update", newFname, newLname, newEmail, newBuilding, newApartment, newImg);
-        updateTenant(id, newFname, newLname, newEmail, newBuilding, newApartment, newImg);
+        updateTenant(user, id, newFname, newLname, newEmail, newBuilding, newApartment, newImg);
         closeModal();
     }
   
@@ -111,7 +110,7 @@ function UpdateTenantsModal(props) {
               <Button variant="secondary" onClick={closeModal}>
                   Cancel
               </Button>
-              <Button variant="primary" onClick={handleUpdateMessage}>
+              <Button variant="primary" onClick={handleUpdate}>
                   Update Tenant
               </Button>
           </Modal.Footer>

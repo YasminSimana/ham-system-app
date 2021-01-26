@@ -28,13 +28,13 @@ function EndDateUpdateModal(props) {
         <Modal.Body>
             Current End Date:
             {voting ? voting.endDate.toLocaleDateString() : null}
-            <Form>
+            <Form noValidate >
             <Form.Group as={Row} controlId="formHorizontalDesc">
               <Form.Label column sm={6}>
                 New End Date
               </Form.Label>
               <Col sm={6}>
-                  <Form.Control type="date" placeholder="New End Date" value={endDate} onChange={e => setEndDate(e.target.value)}  />
+                  <Form.Control required type="date" placeholder="New End Date" value={endDate} onChange={e => setEndDate(e.target.value)}  />
               </Col>
           </Form.Group>
             </Form>

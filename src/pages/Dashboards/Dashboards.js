@@ -1,12 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Redirect } from 'react-router';
-import { AppNavbar } from '../../components/Navbar/Navbar';
 import './Dashboards.css';
-import Parse from 'parse'
-import MessageModel from '../../models/MessageModel';
 import { Col, Container, Row } from 'react-bootstrap';
 import MessagesView from '../../components/MessagesView/MessagesView';
-import VotingModel from '../../models/VotingModel';
 import VotingsView from '../../components/VotingsView/VotingsView';
 import { EmojiSmileFill } from 'react-bootstrap-icons';
 
@@ -20,14 +16,15 @@ function Dashboards(props) {
     //convert data to presentation
 
     const messagesArr = messages.filter(msg => msg.readBy.indexOf(activeUser.id) === -1);
-    const activeVotingsArr = votings.filter(item => ((item.endDate >= new Date()) && (item.results.filter(res => Object.values(res).indexOf(activeUser.id) === -1))));
-    const finishedVotingsArr = votings.filter(item => item.endDate < new Date());
+    const activeVotingsArr = activeUser.isCommitteeMember ? 
+      votings.filter(voting => voting.endDate >= new Date()): 
+      votings.filter(voting => ((voting.endDate >= new Date()) && (voting.results.map(res => res["user"]).indexOf(activeUser.id) === -1)));
+    const finishedVotingsArr = votings.filter(voting => voting.endDate < new Date());
 
 
 
     return (
         <div className="p-dashboards">
-            {/* <AppNavbar activeUser={activeUser} onLogOut={onLogOut}/> */}
             <Container>
                 <Row>
                     <Col md={6} sm={12}>

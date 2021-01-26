@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Button, Col, Form, FormControl, FormGroup, Image, InputGroup, Modal, Row } from 'react-bootstrap';
 import { FileMinusFill, PlusCircleFill } from 'react-bootstrap-icons';
-import InputGroupWithExtras from 'react-bootstrap/esm/InputGroup';
+import './NewVotingModal.css';
 
 function NewVotingModal(props) {
     const { show, handleClose, addVoting } = props;
@@ -16,6 +16,7 @@ function NewVotingModal(props) {
       setDetails("");
       setEndDate(null);
       setOptions([]);
+      setNewOption("");
       handleClose();
     }
 
@@ -24,8 +25,13 @@ function NewVotingModal(props) {
       closeModal();
     }
   
-    function handleRemoveOption(e, option) {
-        console.log("eee",option, e.target.value)
+    function handleRemoveOption(option) {
+        let items = [...options];
+        const index = items.indexOf(option)
+        if (index !== -1) {
+            items.splice(index, 1);
+            setOptions(items);
+  }
     }
     return (
       <Modal show={show} onHide={closeModal} size="xl" className="c-new-voting-modal">
@@ -66,31 +72,19 @@ function NewVotingModal(props) {
                              Options
                          </Form.Label>
                   {options.map((option,index) => 
-                    <InputGroup key={index} as={Row} controlId="inputHorizontalOption">
+                    <InputGroup className="options-group" key={index} as={Row} controlId="inputHorizontalOption">
                         
                          {/* <Col> */}
-                                <FormControl
+                                <FormControl className="option"
                                 type="text" placeholder={option} required
                                 />
                                 <InputGroup.Append>
-                                <Button variant="outline-secondary" onClick={(e)=>handleRemoveOption(e, option)}>
+                                <Button variant="outline-secondary" onClick={()=>handleRemoveOption(option)}>
                                     <FileMinusFill></FileMinusFill>
                                 </Button>
                                 </InputGroup.Append>
                         {/* </Col> */}
                     </InputGroup>
-
-                    // <Form.Group key={index} as={Row} controlId="formHorizontalImage">
-                    //     <Form.Label column sm={2}>
-                    //         Voting Option
-                    //     </Form.Label>
-                    //     <Col sm={10}>
-                    //         <Form.Control type="text" placeholder={option} required/>
-                    //         <FormGroup.Append>
-                    //             <Button variant="outline-secondary">Button</Button>
-                    //         </FormGroup.Append>
-                    //     </Col>
-                    // </Form.Group>
                     )}
                     <InputGroup className="sm-3">
                         <InputGroup.Prepend>

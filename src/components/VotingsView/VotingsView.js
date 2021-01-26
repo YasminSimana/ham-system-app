@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Accordion, Button, Card, Col, Dropdown, DropdownButton, Form, FormControl, InputGroup, Modal, Row } from 'react-bootstrap';
+import { Accordion, Button, Card, Dropdown, DropdownButton} from 'react-bootstrap';
 import './VotingsView.css';
 import PieChart from '../PieChart/PieChart';
 import EndDateUpdateModal from '../EndDataUpdateModal/EndDateUpdateModal';
@@ -46,12 +46,15 @@ function VotingsView(props) {
                         <p>
                             Details: {voting.details}
                         </p>
+                        {activeUser.isCommitteeMember || !isActive ? null :
+                        <div>
                         <p>
                             Your vote:
                         </p>
                         <DropdownButton id="dropdown-variants-Info" variant="info" title="Your Vote" value={userVote}>
                             {voting.options.map(item=><Dropdown.Item value={item} onClick={()=>handleSelectedVote(item, voting)}>{item}</Dropdown.Item>)}
-                        </DropdownButton>
+                        </DropdownButton> 
+                        </div>}
                         
                             {isActive && activeUser.isCommitteeMember ?
                             <div>
@@ -82,7 +85,7 @@ function VotingsView(props) {
                     <p>
                             End Date: {voting.endDate.toLocaleDateString()}
                         </p>
-                        {isActive ? <div className="voting-btm">
+                        {isActive  && activeUser.isCommitteeMember? <div className="voting-btm">
                         <Button onClick={() => setShowModal(true)}>Update End Date</Button>
                     </div> : null}
                     </div>

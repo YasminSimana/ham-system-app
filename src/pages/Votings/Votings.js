@@ -5,9 +5,12 @@ import { Redirect } from 'react-router';
 import NewVotingModal from '../../components/NewVotingModal/NewVotingModal';
 import { Button, Col, Container, Form, Row } from 'react-bootstrap';
 import VotingsView from '../../components/VotingsView/VotingsView';
-import { AppNavbar } from '../../components/Navbar/Navbar';
 import './Votings.css';
 
+
+//Votings component is the page were user see all relevant votings and filter them
+//Committee member can add a new vote, change current voting end date and see results and voting percentage
+//Tenants can also vote on open votings and see results for finished votings
 function Votings(props) {
     const {activeUser, votings, addVoting, updateVoting, updateSelectedVote, onLogOut, users} = props;
     const [activeVotingsArr, setActiveVotingsArr] = useState([]);
@@ -32,14 +35,9 @@ function Votings(props) {
     //converting data into presentation
     const filteredFinishedVotings = finishedVotingsArr.filter(voting => (voting.title.includes(searchByStr) || voting.details.includes(searchByStr)));
     const filteredActiveVotings = activeUser.isCommitteeMember ? activeVotingsArr : activeVotingsArr.filter(voting => voting.results.map(res => res["user"]).indexOf(activeUser.id) === -1);
-    // debugger;
-    // activeVotingsArr[0].results.map(res=>res["user"]).indexOf(activeUser.id)
-    // const filteredActiveVotings = activeVotingsArr;
 
     return (
         <div className="p-votings">
-            {/* <div>
-            <AppNavbar activeUser={activeUser} onLogOut={onLogOut}/> */}
             <div>
                 <Container className="votings-cols">
                     <Col>
@@ -53,7 +51,7 @@ function Votings(props) {
                             </Col> : null}
                         </Row>
                         <Row className="accor-size" sm={12}>
-                            <VotingsView isActive={true} votings={filteredActiveVotings} activeUser={activeUser} updateVoting={updateVoting} updateSelectedVote={updateSelectedVote} users={users}/>
+                            <VotingsView isActive={true} votings={filteredActiveVotings} activeUser={activeUser} updateVotingFromModal={updateVoting} updateSelectedVote={updateSelectedVote} users={users}/>
                         </Row>
                     </Col>
                     
@@ -83,7 +81,6 @@ function Votings(props) {
             </Container>
             <NewVotingModal show={showModal} handleClose={() => setShowModal(false)} addVoting={addVoting}/>
         </div>
-        // </div>
     );
 }
 

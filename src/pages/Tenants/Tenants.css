@@ -34,5 +34,6 @@
 .p-tenants .new-msg-btn {
     display: flex;
     justify-content: flex-end;
+    margin-bottom: 1em;
 }
 

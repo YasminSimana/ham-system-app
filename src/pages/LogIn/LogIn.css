@@ -25,3 +25,16 @@
     width: 100%;
     text-align: initial;
 }
+
+.p-login h2 {
+    margin-top: 1em;
+}
+
+.p-login .alert-not-show {
+    margin-top: 1em;
+    display: none;
+}
+
+.p-login .alert-show {
+    margin-top: 1em;
+}

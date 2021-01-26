@@ -1,6 +1,5 @@
 import * as React from 'react';
 import Parse from 'parse';
-import UserModel from '../../models/UserModel';
 import { Button, Form, Image, Row} from 'react-bootstrap';
 import { Redirect } from 'react-router';
 import './SignUp.css';
@@ -37,8 +36,6 @@ export function SignUp(props) {
 
         const result = await myNewObject.save();
         
-        console.log('Community created', result);
-
         const user = new Parse.User()
         user.set('username', userName);
         user.set('email', email);

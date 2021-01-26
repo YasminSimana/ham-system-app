@@ -29,7 +29,6 @@ function UpdateMessageModal(props) {
         const newDetails = details ? details : currentDetails;
         const newPriority = priority ? priority : currentPriority;
         const newImg = img ? img : currentImg;
-        console.log("update", newTitle, newDetails, newPriority, newImg);
         updateMessage(id, newTitle, newDetails, newPriority, newImg);
         closeModal();
     }

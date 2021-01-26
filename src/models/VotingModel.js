@@ -20,7 +20,6 @@ class VotingModel {
         for (const res of this.results) {
             dataArr[this.options.indexOf(res["vote"])] ++;
         }
-        console.log("max",dataArr)
         return this.options[dataArr.indexOf(Math.max(...dataArr))];
     }
 
@@ -29,8 +28,6 @@ class VotingModel {
         for(let i of this.options){
             optionsArr.push(<Dropdown.Item value={i}>{i}</Dropdown.Item>)
         }
-        console.log("options", this.options)
-        console.log("optionsArr", optionsArr)
         return optionsArr;
     }
 }

@@ -17,14 +17,6 @@ function MessagesView(props) {
     const [loading, setLoading] = useState(true);
 
     useEffect(()=> {
-        // async function fetchMessage() {
-        //     debugger;
-        //     const parseMessage = Parse.Object.extend('message');
-        //     const query = new Parse.Query(parseMessage);
-        //     console.log("selected message", messages[selectedMsg])
-        //     const parseMessageData = await query.get(messages[selectedMsg].id);
-        //     fetchCommentsData(parseMessageData);
-        // }
 
         async function fetchCommentsData(msg) {
             const parseComment = Parse.Object.extend('Comment');
@@ -44,24 +36,17 @@ function MessagesView(props) {
         return <Redirect to="/" />
     }
 
-    async function updateMessage(readBy, index){
+    async function updateMessage(readBy, id){
         const message = Parse.Object.extend('message');
         const query = new Parse.Query(message);
-        try {
-            console.log("here", messages)
-            console.log("here2", index)
-            const object = await query.get(messages[index].id);
-            object.set('readBy', readBy);
-            try{
-                const response = await object.save();
-                console.log('Updated message', response);
-            }
-            catch (error1) {
-                console.error('Error while updating message', error1);
-            }
+        const object = await query.get(id);
+        object.set('readBy', readBy);
+        try{
+            const response = await object.save();
+            console.log('Updated message', response);
         }
-        catch (error2) {
-            console.log('Error while updating message', error2)
+        catch (error1) {
+            console.error('Error while updating message', error1);
         }
     }
 
@@ -70,12 +55,10 @@ function MessagesView(props) {
         setSelectedMsg(eventKey);
 
         if (wasReadByUser(eventKey)){
-            console.log("was read", messages[eventKey].readBy)
             return;
         } else {
-            console.log("wasn't read", messages[eventKey].readBy)
             messages[eventKey].readBy.push(activeUser.id)
-            updateMessage(messages[eventKey].readBy, eventKey);
+            updateMessage(messages[eventKey].readBy, messages[eventKey].id);
         }
     }
 
@@ -112,14 +95,16 @@ function MessagesView(props) {
     }
 
     //convert data to presentation
-    const commentsView = commentsArr.map(comment => {
-        const user = users.find(user => user.id === comment.user.id);
-        return <div className="comments-data" key={comment.id}>
-            <div>{user.img ? <img src={user.img}></img> : <PersonCircle/>} {user.getFullName()}:</div>
-            <div>{comment.description}</div>
-            {console.log("comment user", comment.parseComment)}
-        </div>})
-
+    let commentsView;
+    if (users) {
+        commentsView = commentsArr.map(comment => {
+            const user = users.find(user => user.id === comment.user.id);
+            return <div className="comments-data" key={comment.id}>
+                <div>{user.img ? <img src={user.img}></img> : <PersonCircle/>} {user.getFullName()}:</div>
+                <div>{comment.description}</div>
+            </div>}) 
+    }
+    
     const messagesView = messages.map((msg,index) => {
         return <Card key={messages.indexOf(msg)}>
             <Accordion.Toggle as={Card.Header} eventKey={'' + index}  onClick={e=>msgOnClick(index)}>
@@ -177,15 +162,6 @@ function MessagesView(props) {
                 </div>
             </Card.Body>
             </Accordion.Collapse>
-            {/* {(selectedMsg !== null && messages) ? <UpdateMessageModal
-                show={showModal} 
-                handleClose={() => setShowModal(false)} 
-                updateMessage={updateMessageFromModal} 
-                id={messages[selectedMsg].id} 
-                currentTitle={messages[selectedMsg].title} 
-                currentDetails={messages[selectedMsg].details} 
-                currentPriority={messages[selectedMsg].priority} 
-                currentImg={messages[selectedMsg].img}/> : null} */}
         </Card>
     });
 

@@ -14,6 +14,11 @@ import MessageModel from './models/MessageModel';
 import VotingModel from './models/VotingModel';
 import { AppNavbar } from './components/Navbar/Navbar';
 
+//App is the main component
+//Here we fetch all data and handle the connection wih the DB
+//users is an array of all relevnt users by the active user's community
+//messages is an array of all relevant messages by the active user's community
+//votings is an array of all relevant votings by the active user's community
 
 function App() {
   const [activeUser, setActiveUser] = useState(
@@ -43,7 +48,6 @@ function App() {
     async function fetchMessagesData() {
         const parseMessage = Parse.Object.extend('message');
         const query = new Parse.Query(parseMessage);
-        console.log("active user", activeUser)
         query.equalTo("community", activeUser.community);
         try {const parseMessages = await query.find();
         setMessages(parseMessages.map(item => new MessageModel(item)));
@@ -68,7 +72,6 @@ function App() {
   }
 
     if (activeUser) {
-        console.log("active user", activeUser);
         fetchUsersData();
         fetchMessagesData();
         fetchVotingsData();
@@ -173,8 +176,10 @@ async function updateVoting(endDate, voting) {
   try {
       const response = await object.save();
       console.log('Success! updated voting end date', response);
-      const tmpArr = votings.filter(item => item.id !== voting.id);
-      setVotings(tmpArr.concat(new VotingModel(response))); 
+      let items = [...votings];
+      const getIndex = votings.indexOf(voting);
+      items[getIndex] = new VotingModel(response);
+      setVotings(items);
   } catch (error) {
       console.log("Error! update voting end date", error);
   }
@@ -185,15 +190,15 @@ async function updateSelectedVote(vote, voting) {
   const query = new Parse.Query(Voting);
   const object = await query.get(voting.id);
   let results = voting.results.concat({"user": activeUser.id, "vote": vote});
-  console.log("voting.results", voting.results)
-  console.log("results", results)
   object.set('results', results);
  
   try {
       const response = await object.save();
       console.log('Success! updated voting results', response);
-      const tmpArr = votings.filter(item => item.id !== voting.id);
-      setVotings(tmpArr.concat(new VotingModel(response))); 
+      let items = [...votings];
+      const getIndex = votings.indexOf(voting);
+      items[getIndex] = new VotingModel(response);
+      setVotings(items);
   } catch (error) {
       console.log("Error! update voting results", error);
   }
@@ -226,7 +231,7 @@ async function addTenant(fname, lname, email, building, apartment, img) {
   }
 }
 
-async function updateTenantInfo(id, fname, lname, email, building, apartment, img) {
+async function updateTenantInfo(tenant, id, fname, lname, email, building, apartment, img) {
   const User = new Parse.User();
   const query = new Parse.Query(User);
   const user = await query.get(id);
@@ -240,8 +245,10 @@ async function updateTenantInfo(id, fname, lname, email, building, apartment, im
   try {
       const response = await user.save();
       console.log('Success! updating user(tenant)', response);
-      const tmpArr = users.filter(item => item.id !== id);
-      setUsers(tmpArr.concat(new UserModel(response)));
+      let items = [...users];
+      const getIndex = users.indexOf(tenant);
+      items[getIndex] = new UserModel(response);
+      setUsers(items);
   } catch(error) {
       console.error('Error! updating user(tenant)', error);
   }

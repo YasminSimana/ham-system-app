@@ -26,17 +26,18 @@ function TenantsView(props) {
             <Card.Body>
                 <Container>
                     <Row className="tenant-body">
-                        <Col>
+                        <Col lg={4} md={4} sm={12}>
                         <img src={tenant.img}></img>
                         </Col>
-                        <Col className="tenant-info">
+                        <Col className="tenant-info" lg={4} md={4} sm={12}>
                         <p>Name: {tenant.fname} {tenant.lname}</p>
                         <p>Email: {tenant.email}</p>
                         <p>Building: {tenant.building}</p>
                         <p>Apt: {tenant.apartment}</p>
                         </Col>
-                        <Col>
+                        <Col lg={3} md={3} sm={12}>
                         <div className="edit-btm">
+                            
                             <Button onClick={() => setShowModal(true)}>Update</Button>
                             <Button onClick={handleDelete}>Delete</Button>
                         </div>
@@ -53,9 +54,10 @@ function TenantsView(props) {
             <Accordion defaultActiveKey={selectedTenant}>
                 {tenantsView}
             </Accordion>
-            {tenants && selectedTenant ? 
+            {tenants && selectedTenant !== null ? 
             <UpdateTenantsModal
                 show={showModal} 
+                user={tenants[selectedTenant]}
                 handleClose={() => setShowModal(false)} 
                 updateTenant={updateTenantsInfoFromModal} 
                 id={tenants[selectedTenant].id} 

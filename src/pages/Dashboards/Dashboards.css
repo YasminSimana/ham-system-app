@@ -31,3 +31,6 @@
     justify-content: flex-end;
 }
 
+.p-dashboards .row {
+    margin-top: 20px;
+}

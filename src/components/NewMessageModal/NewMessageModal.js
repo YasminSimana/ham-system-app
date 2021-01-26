@@ -5,7 +5,6 @@ function NewMessageModal(props) {
     const { show, handleClose, addMessage } = props;
     const [title, setTitle] = useState("");
     const [details, setDetails] = useState("");
-    // const [priority, setPriority] = useState(1);
     const [priority, setPriority] = useState("Info");
     const [img, setImg] = useState("");
     
@@ -57,15 +56,6 @@ function NewMessageModal(props) {
                           <Form.Control type="text" placeholder="Message Details" value={details} onChange={e => setDetails(e.target.value)}  />
                       </Col>
                   </Form.Group>
-
-                  {/* <Form.Group as={Row} controlId="formHorizontalDesc">
-                      <Form.Label column sm={2}>
-                          Message Priority
-                      </Form.Label>
-                      <Col sm={10}>
-                          <Form.Control type="number" placeholder="Message Priority" value={priority} onChange={e => setPriority(e.target.value)}  />
-                      </Col>
-                  </Form.Group> */}
 
                   <Form.Group as={Row} controlId="formHorizontalDesc">
                       <Form.Label column sm={2}>

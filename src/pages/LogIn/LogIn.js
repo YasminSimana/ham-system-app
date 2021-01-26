@@ -2,29 +2,31 @@
 import * as React from 'react';
 import Parse from 'parse';
 import UserModel from '../../models/UserModel';
-import { Button, Form} from 'react-bootstrap';
+import { Alert, Button, Form} from 'react-bootstrap';
 import { Redirect } from 'react-router';
 import './LogIn.css';
 import { useState } from 'react';
 
 export function LogIn(props) {
   const {onLogIn} = props;
-  const [userName, setUserName] = useState("yasmins")
-  const [email, setEmail] = useState("yasminsheffer21@gmail.com");
-  const [pwd, setPwd] = useState("123");
+  const [userName, setUserName] = useState("")
+  const [email, setEmail] = useState("");
+  const [pwd, setPwd] = useState("");
   const [redirect, setRedirect] = useState(false);
+  const [error, setError] = useState("alert-not-show");
 
   async function login() {
+    setError("alert-not-show");
     try{
       const parseUser = await Parse.User.logIn(email,pwd);
       console.log('Logged in user', parseUser);
       const user = new UserModel(parseUser);
-      console.log("community", user.community.id);
       onLogIn(user);
       setRedirect(true);
     }
     catch(error) {
-        console.error('Error while logging in user', error);
+      setError("alert-show");
+      console.error('Error while logging in user', error);
     }
   }
 
@@ -36,6 +38,11 @@ export function LogIn(props) {
     <div className="p-login">
 
       <Form>
+      <Alert className={error} variant='danger'>
+         Wrong Email or password... 
+         <br></br>
+         pleace try again
+      </Alert>
         <h2>
           Log-In to HAM
         </h2>
