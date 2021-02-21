@@ -136,6 +136,20 @@ async function deleteMessage(id) {
     const query = new Parse.Query(ParseMessage);
     const object = await query.get(id);
     try {
+      //delete messages related comments      
+        const parseComment = Parse.Object.extend('Comment');
+        const query = new Parse.Query(parseComment);
+        query.equalTo("msg", object);
+        const parseComments = await query.find();
+        console.log("comments arr", parseComments);
+        for (let comm of parseComments){
+          try {
+            const commRes = await comm.destroy();
+            console.log('Success! delete comment', commRes);
+          } catch (commError){
+            console.log("Error! delete comment", commError);
+          }
+        }
       const response = await object.destroy();
       console.log('Success! deleted message', response);
       const tmpArr = messages.filter(item => item.id !== id);
